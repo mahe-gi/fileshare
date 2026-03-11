@@ -5,7 +5,7 @@ import UploadZone from '@/components/UploadZone';
 import ResultsDisplay from '@/components/ResultsDisplay';
 import LoadingScreen from '@/components/LoadingScreen';
 import Footer from '@/components/Footer';
-import { uploadToTmpFiles, UploadError, validateFileSize, isOnline, MAX_FILE_SIZE } from '@/lib/api';
+import { uploadToTmpFiles, UploadError, validateFileSize, isOnline } from '@/lib/api';
 
 /**
  * Application state interface
@@ -228,16 +228,24 @@ export default function Home() {
         {/* Conditional rendering based on upload status */}
         {state.uploadStatus === 'success' && state.uploadedFiles.length > 0 ? (
           // Display results after successful upload
-          <div className="animate-fade-in w-full max-w-4xl">
-            <div className="text-center mb-6">
-              <h2 className="text-xl sm:text-2xl font-semibold text-gray-200 mb-2">
+          <div className="animate-fade-in w-full max-w-6xl px-4">
+            {/* Header */}
+            <div className="text-center mb-8">
+              <h2 className="text-2xl sm:text-3xl font-semibold text-gray-200 mb-3">
                 {state.uploadedFiles.length === 1 ? 'File Ready to Share' : `${state.uploadedFiles.length} Files Ready to Share`}
               </h2>
-              <p className="text-sm text-gray-400">⏰ Each QR code will work for 60 minutes</p>
+              <p className="text-sm sm:text-base text-gray-400 mb-2">⏰ Each QR code will work for 60 minutes</p>
+              <p className="text-xs text-gray-500">Scan the QR code or use the buttons to share</p>
             </div>
 
-            {/* Grid layout for multiple files */}
-            <div className={`grid gap-6 ${state.uploadedFiles.length === 1 ? 'grid-cols-1 max-w-2xl mx-auto' : 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3'}`}>
+            {/* Grid layout for files */}
+            <div className={`grid gap-6 mb-8 ${
+              state.uploadedFiles.length === 1 
+                ? 'grid-cols-1 max-w-2xl mx-auto' 
+                : state.uploadedFiles.length === 2
+                ? 'grid-cols-1 md:grid-cols-2 max-w-4xl mx-auto'
+                : 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3'
+            }`}>
               {state.uploadedFiles.map((file, index) => (
                 <ResultsDisplay
                   key={index}
@@ -249,12 +257,12 @@ export default function Home() {
             </div>
 
             {/* Upload more button */}
-            <div className="text-center mt-8">
+            <div className="text-center">
               <button
                 onClick={handleUploadMore}
-                className="px-6 py-3 bg-gray-700 text-white rounded-lg hover:bg-gray-600 active:bg-gray-800 transition-all duration-200 font-semibold shadow-md hover:shadow-lg hover:scale-[1.02] active:scale-[0.98] text-sm sm:text-base border border-gray-500"
+                className="px-8 py-3 bg-gray-700 text-white rounded-lg hover:bg-gray-600 active:bg-gray-800 transition-all duration-200 font-semibold shadow-md hover:shadow-lg hover:scale-[1.02] active:scale-[0.98] text-sm sm:text-base border border-gray-500"
               >
-                Upload More Files
+                📤 Upload More Files
               </button>
             </div>
           </div>

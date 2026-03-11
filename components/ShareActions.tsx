@@ -3,9 +3,10 @@ import { useState } from 'react';
 interface ShareActionsProps {
   downloadUrl: string;
   qrCodeRef: React.RefObject<HTMLCanvasElement>;
+  isCompact?: boolean;
 }
 
-export default function ShareActions({ downloadUrl, qrCodeRef }: ShareActionsProps) {
+export default function ShareActions({ downloadUrl, qrCodeRef, isCompact = false }: ShareActionsProps) {
   const [copySuccess, setCopySuccess] = useState(false);
 
   const handleCopyToClipboard = async () => {
@@ -70,10 +71,10 @@ export default function ShareActions({ downloadUrl, qrCodeRef }: ShareActionsPro
   };
 
   return (
-    <div className="flex flex-col sm:flex-row gap-3 w-full max-w-md px-4">
+    <div className={`flex ${isCompact ? 'flex-col gap-2 w-full' : 'flex-col sm:flex-row gap-3 w-full max-w-md'}`}>
       <button
         onClick={handleCopyToClipboard}
-        className="flex-1 px-6 py-3 bg-gray-700 text-white rounded-lg hover:bg-gray-600 active:bg-gray-800 transition-all duration-200 font-semibold shadow-md hover:shadow-lg hover:scale-[1.02] active:scale-[0.98] text-sm sm:text-base border border-gray-500"
+        className={`${isCompact ? 'flex-1 px-4 py-2 text-xs' : 'flex-1 px-6 py-3 text-sm sm:text-base'} bg-gray-700 text-white rounded-lg hover:bg-gray-600 active:bg-gray-800 transition-all duration-200 font-semibold shadow-md hover:shadow-lg hover:scale-[1.02] active:scale-[0.98] border border-gray-500`}
         aria-label="Copy download URL to clipboard"
       >
         {copySuccess ? '✓ Copied!' : 'Copy Link'}
@@ -81,7 +82,7 @@ export default function ShareActions({ downloadUrl, qrCodeRef }: ShareActionsPro
       
       <button
         onClick={handleDownloadQR}
-        className="flex-1 px-6 py-3 bg-gray-700 text-white rounded-lg hover:bg-gray-600 active:bg-gray-800 transition-all duration-200 font-semibold shadow-md hover:shadow-lg hover:scale-[1.02] active:scale-[0.98] text-sm sm:text-base border border-gray-500"
+        className={`${isCompact ? 'flex-1 px-4 py-2 text-xs' : 'flex-1 px-6 py-3 text-sm sm:text-base'} bg-gray-700 text-white rounded-lg hover:bg-gray-600 active:bg-gray-800 transition-all duration-200 font-semibold shadow-md hover:shadow-lg hover:scale-[1.02] active:scale-[0.98] border border-gray-500`}
         aria-label="Download QR code as PNG image"
       >
         Download QR
