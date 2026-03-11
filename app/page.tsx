@@ -267,18 +267,28 @@ export default function Home() {
                 />
               </div>
             ) : (
-              // Multiple files - show one QR for share page
+              // Multiple files - show one QR for share page with short URL
               <div className="max-w-2xl mx-auto">
                 <ResultsDisplay
                   downloadUrl={(() => {
-                    // Create share link with all files
+                    // Generate short random ID
+                    const id = Math.random().toString(36).substring(2, 8);
+                    
+                    // Store files data in localStorage
                     const filesData = state.uploadedFiles.map(f => ({
                       fileName: f.fileName,
                       downloadUrl: f.downloadUrl,
                       fileSize: f.fileSize
                     }));
-                    const encoded = btoa(JSON.stringify(filesData));
-                    return `${window.location.origin}/share?data=${encoded}`;
+                    localStorage.setItem(`share_${id}`, JSON.stringify(filesData));
+                    
+                    // Set expiry (60 minutes)
+                    setTimeout(() => {
+                      localStorage.removeItem(`share_${id}`);
+                    }, 60 * 60 * 1000);
+                    
+                    // Return short URL
+                    return `${window.location.origin}/share/${id}`;
                   })()}
                   fileName={`${state.uploadedFiles.length} Files`}
                   isMultiple={false}
