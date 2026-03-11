@@ -3,6 +3,8 @@
 import { useState } from 'react';
 import UploadZone from '@/components/UploadZone';
 import ResultsDisplay from '@/components/ResultsDisplay';
+import LoadingScreen from '@/components/LoadingScreen';
+import Footer from '@/components/Footer';
 import { uploadToTmpFiles, UploadError } from '@/lib/api';
 
 /**
@@ -15,6 +17,7 @@ interface AppState {
   fileName: string | null;
   fileSize: number | null;
   errorMessage: string | null;
+  showLoading: boolean;
 }
 
 /**
@@ -45,7 +48,8 @@ export default function Home() {
     downloadUrl: null,
     fileName: null,
     fileSize: null,
-    errorMessage: null
+    errorMessage: null,
+    showLoading: true
   });
 
   /**
@@ -133,68 +137,87 @@ export default function Home() {
   };
 
   return (
-    <main className="min-h-screen flex flex-col items-center justify-center p-4 sm:p-8 bg-gradient-to-br from-gray-50 to-gray-100">
-      {/* Header - Requirement 5.1 */}
-      <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-6 sm:mb-8 text-gray-800 text-center px-4">
-        Upload File → Get QR → Share
-      </h1>
+    <>
+      {/* Initial loading screen with thank you message */}
+      {state.showLoading && (
+        <LoadingScreen onLoadingComplete={() => setState({ ...state, showLoading: false })} />
+      )}
 
-      {/* Conditional rendering based on upload status */}
-      {state.uploadStatus === 'success' && state.downloadUrl && state.fileName ? (
-        // Display results after successful upload (Requirement 5.3)
-        // Fade-in animation for smooth transition (Requirement 1.3, 2.3)
-        <div className="animate-fade-in">
-          <ResultsDisplay 
-            downloadUrl={state.downloadUrl}
-            fileName={state.fileName}
-          />
+      {/* Main application */}
+      <main className="min-h-screen flex flex-col items-center justify-center p-4 sm:p-8 bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50">
+        {/* Header with trainer branding */}
+        <div className="text-center mb-8 animate-fade-in">
+          <div className="inline-flex items-center justify-center w-16 h-16 sm:w-20 sm:h-20 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-full mb-4 shadow-lg">
+            <span className="text-3xl sm:text-4xl">📚</span>
+          </div>
+          <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-2 bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 bg-clip-text text-transparent">
+            Manoj Sir's File Sharing Platform
+          </h1>
+          <p className="text-sm sm:text-base text-gray-600 max-w-xl mx-auto px-4">
+            Upload File → Generate QR Code → Share Instantly
+          </p>
         </div>
-      ) : (
-        // Display upload zone before/during upload (Requirement 5.2)
-        <div className="animate-fade-in">
-          <UploadZone 
-            onFileSelected={handleFileSelected}
-            disabled={state.uploadStatus === 'uploading'}
-          />
 
-          {/* Display uploading status (Requirement 1.3, 2.3) */}
-          {state.uploadStatus === 'uploading' && (
-            <div className="mt-6 text-center animate-fade-in">
-              <div className="relative inline-block">
-                {/* Outer spinning ring */}
-                <div className="animate-spin rounded-full h-16 w-16 border-4 border-blue-200 border-t-blue-600"></div>
-                {/* Inner pulsing circle */}
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <div className="h-8 w-8 bg-blue-500 rounded-full animate-pulse opacity-50"></div>
+        {/* Conditional rendering based on upload status */}
+        {state.uploadStatus === 'success' && state.downloadUrl && state.fileName ? (
+          // Display results after successful upload (Requirement 5.3)
+          // Fade-in animation for smooth transition (Requirement 1.3, 2.3)
+          <div className="animate-fade-in">
+            <ResultsDisplay 
+              downloadUrl={state.downloadUrl}
+              fileName={state.fileName}
+            />
+          </div>
+        ) : (
+          // Display upload zone before/during upload (Requirement 5.2)
+          <div className="animate-fade-in">
+            <UploadZone 
+              onFileSelected={handleFileSelected}
+              disabled={state.uploadStatus === 'uploading'}
+            />
+
+            {/* Display uploading status (Requirement 1.3, 2.3) */}
+            {state.uploadStatus === 'uploading' && (
+              <div className="mt-6 text-center animate-fade-in">
+                <div className="relative inline-block">
+                  {/* Outer spinning ring */}
+                  <div className="animate-spin rounded-full h-16 w-16 border-4 border-indigo-200 border-t-indigo-600"></div>
+                  {/* Inner pulsing circle */}
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <div className="h-8 w-8 bg-indigo-500 rounded-full animate-pulse opacity-50"></div>
+                  </div>
                 </div>
+                <p className="mt-4 text-gray-700 font-semibold text-lg">Uploading...</p>
+                <p className="mt-1 text-gray-500 text-sm">Please wait while we process your file</p>
               </div>
-              <p className="mt-4 text-gray-700 font-semibold text-lg">Uploading...</p>
-              <p className="mt-1 text-gray-500 text-sm">Please wait while we process your file</p>
-            </div>
-          )}
+            )}
 
-          {/* Display error message (Requirement 2.4, 7) */}
-          {state.uploadStatus === 'error' && state.errorMessage && (
-            <div className="mt-6 max-w-2xl w-full px-4 animate-fade-in">
-              <div className="bg-red-50 border-2 border-red-200 rounded-lg p-4 sm:p-6 shadow-sm">
-                <div className="flex items-start">
-                  <div className="text-2xl sm:text-3xl mr-3 flex-shrink-0">⚠️</div>
-                  <div className="flex-1 min-w-0">
-                    <h3 className="font-semibold text-red-800 mb-2 text-base sm:text-lg">Upload Failed</h3>
-                    <p className="text-red-700 text-sm sm:text-base break-words">{state.errorMessage}</p>
-                    <button
-                      onClick={() => setState({ ...state, uploadStatus: 'idle', errorMessage: null })}
-                      className="mt-4 px-4 py-2 text-sm font-medium text-red-600 hover:text-red-800 hover:bg-red-100 active:bg-red-200 rounded-md transition-all duration-200 hover:shadow-sm"
-                    >
-                      Try again
-                    </button>
+            {/* Display error message (Requirement 2.4, 7) */}
+            {state.uploadStatus === 'error' && state.errorMessage && (
+              <div className="mt-6 max-w-2xl w-full px-4 animate-fade-in">
+                <div className="bg-red-50 border-2 border-red-200 rounded-lg p-4 sm:p-6 shadow-sm">
+                  <div className="flex items-start">
+                    <div className="text-2xl sm:text-3xl mr-3 flex-shrink-0">⚠️</div>
+                    <div className="flex-1 min-w-0">
+                      <h3 className="font-semibold text-red-800 mb-2 text-base sm:text-lg">Upload Failed</h3>
+                      <p className="text-red-700 text-sm sm:text-base break-words">{state.errorMessage}</p>
+                      <button
+                        onClick={() => setState({ ...state, uploadStatus: 'idle', errorMessage: null })}
+                        className="mt-4 px-4 py-2 text-sm font-medium text-red-600 hover:text-red-800 hover:bg-red-100 active:bg-red-200 rounded-md transition-all duration-200 hover:shadow-sm"
+                      >
+                        Try again
+                      </button>
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-          )}
-        </div>
-      )}
-    </main>
+            )}
+          </div>
+        )}
+
+        {/* Footer with dedication */}
+        <Footer />
+      </main>
+    </>
   );
 }

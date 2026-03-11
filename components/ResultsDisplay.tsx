@@ -1,6 +1,7 @@
 import { useRef, useEffect } from 'react';
 import QRCodeDisplay from './QRCodeDisplay';
 import ShareActions from './ShareActions';
+import QRWarningBanner from './QRWarningBanner';
 
 interface ResultsDisplayProps {
   downloadUrl: string;
@@ -21,6 +22,9 @@ export default function ResultsDisplay({ downloadUrl, fileName }: ResultsDisplay
 
   return (
     <div className="w-full max-w-2xl mx-auto space-y-6 sm:space-y-8 px-4">
+      {/* 60-minute warning banner */}
+      <QRWarningBanner />
+
       {/* File name header */}
       <div className="text-center animate-fade-in">
         <h2 className="text-xl sm:text-2xl font-semibold text-gray-800 mb-2">

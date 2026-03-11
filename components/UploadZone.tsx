@@ -55,11 +55,11 @@ export default function UploadZone({ onFileSelected, disabled }: UploadZoneProps
           border-2 border-dashed rounded-xl p-8 sm:p-12 text-center cursor-pointer
           transition-all duration-300 ease-in-out
           ${isDragActive 
-            ? 'border-blue-500 bg-blue-50 scale-[1.02] shadow-lg' 
-            : 'border-gray-300 hover:border-blue-400 hover:shadow-md bg-white'
+            ? 'border-indigo-500 bg-indigo-50 scale-[1.02] shadow-lg' 
+            : 'border-purple-300 hover:border-indigo-400 hover:shadow-md bg-white'
           }
           ${disabled 
-            ? 'opacity-50 cursor-not-allowed bg-gray-100 hover:border-gray-300 hover:shadow-none scale-100' 
+            ? 'opacity-50 cursor-not-allowed bg-gray-100 hover:border-purple-300 hover:shadow-none scale-100' 
             : ''
           }
         `}
@@ -72,7 +72,7 @@ export default function UploadZone({ onFileSelected, disabled }: UploadZoneProps
           </div>
           
           {isDragActive ? (
-            <p className="text-base sm:text-lg font-semibold text-blue-600 transition-all duration-200">
+            <p className="text-base sm:text-lg font-semibold text-indigo-600 transition-all duration-200">
               Drop your file here
             </p>
           ) : (
