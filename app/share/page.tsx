@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 
 interface FileData {
@@ -9,7 +9,7 @@ interface FileData {
   fileSize: number;
 }
 
-export default function SharePage() {
+function SharePageContent() {
   const searchParams = useSearchParams();
   const [files, setFiles] = useState<FileData[]>([]);
   const [error, setError] = useState<string | null>(null);
@@ -110,5 +110,20 @@ export default function SharePage() {
         <p>Files are hosted temporarily and will expire after 60 minutes</p>
       </div>
     </main>
+  );
+}
+
+export default function SharePage() {
+  return (
+    <Suspense fallback={
+      <main className="min-h-screen flex items-center justify-center p-4 bg-gradient-to-br from-gray-900 via-black to-gray-800">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-16 w-16 border-4 border-gray-700 border-t-gray-300 mx-auto mb-4"></div>
+          <p className="text-gray-400">Loading files...</p>
+        </div>
+      </main>
+    }>
+      <SharePageContent />
+    </Suspense>
   );
 }
