@@ -252,59 +252,29 @@ export default function Home() {
                 {state.uploadedFiles.length === 1 ? 'File Ready to Share' : `${state.uploadedFiles.length} Files Ready to Share`}
               </h2>
               <p className="text-sm sm:text-base text-gray-400 mb-2">⏰ Links will work for 60 minutes</p>
-              {state.uploadedFiles.length > 1 && (
-                <p className="text-xs text-gray-500">One QR code for all files</p>
-              )}
+              <p className="text-xs text-gray-500">Each file has its own simple QR code</p>
             </div>
 
-            {/* Single file - show individual QR */}
-            {state.uploadedFiles.length === 1 ? (
-              <div className="max-w-2xl mx-auto">
+            {/* Grid layout for files - each with its own QR code */}
+            <div className={`grid gap-6 mb-8 ${
+              state.uploadedFiles.length === 1 
+                ? 'grid-cols-1 max-w-2xl mx-auto' 
+                : state.uploadedFiles.length === 2
+                ? 'grid-cols-1 md:grid-cols-2 max-w-4xl mx-auto'
+                : 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3'
+            }`}>
+              {state.uploadedFiles.map((file, index) => (
                 <ResultsDisplay
-                  downloadUrl={state.uploadedFiles[0].downloadUrl}
-                  fileName={state.uploadedFiles[0].fileName}
-                  isMultiple={false}
+                  key={index}
+                  downloadUrl={file.downloadUrl}
+                  fileName={file.fileName}
+                  isMultiple={state.uploadedFiles.length > 1}
                 />
-              </div>
-            ) : (
-              // Multiple files - show one QR for share page with short URL
-              <div className="max-w-2xl mx-auto">
-                <ResultsDisplay
-                  downloadUrl={(() => {
-                    // Generate short random ID
-                    const id = Math.random().toString(36).substring(2, 8);
-                    
-                    // Prepare files data
-                    const filesData = state.uploadedFiles.map(f => ({
-                      fileName: f.fileName,
-                      downloadUrl: f.downloadUrl,
-                      fileSize: f.fileSize
-                    }));
-                    
-                    // Encode data for URL
-                    const encoded = btoa(JSON.stringify(filesData));
-                    
-                    // Store in localStorage as backup
-                    localStorage.setItem(`share_${id}`, JSON.stringify(filesData));
-                    
-                    // Set expiry (60 minutes)
-                    setTimeout(() => {
-                      localStorage.removeItem(`share_${id}`);
-                    }, 60 * 60 * 1000);
-                    
-                    // Return URL with data parameter for cross-device sharing
-                    return `${window.location.origin}/share/${id}?d=${encoded}`;
-                  })()}
-                  fileName={`${state.uploadedFiles.length} Files`}
-                  isMultiple={false}
-                  showFilesList={true}
-                  filesList={state.uploadedFiles}
-                />
-              </div>
-            )}
+              ))}
+            </div>
 
             {/* Action buttons */}
-            <div className="flex flex-col sm:flex-row gap-3 justify-center items-center mt-8">
+            <div className="flex flex-col sm:flex-row gap-3 justify-center items-center">
               <button
                 onClick={handleAddMoreFiles}
                 className="px-8 py-3 bg-gray-700 text-white rounded-lg hover:bg-gray-600 active:bg-gray-800 transition-all duration-200 font-semibold shadow-md hover:shadow-lg hover:scale-[1.02] active:scale-[0.98] text-sm sm:text-base border border-gray-500"
