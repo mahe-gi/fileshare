@@ -44,7 +44,7 @@ const SUPPORTED_TYPES = {
  */
 export default function Home() {
   // You can add your trainer's image URL here
-  const trainerImageUrl = ''; // Add image URL like: '/manoj-sir.jpg' or 'https://...'
+  const trainerImageUrl = '/manoj-sir.png'; // Add image URL like: '/manoj-sir.jpg' or 'https://...'
   
   const [state, setState] = useState<AppState>({
     uploadStatus: 'idle',
@@ -169,7 +169,7 @@ export default function Home() {
             )}
           </div>
           <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-2 bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 bg-clip-text text-transparent">
-            Manoj Sir's File Sharing Platform
+             File Sharing Platform
           </h1>
           <p className="text-sm sm:text-base text-gray-600 max-w-xl mx-auto px-4">
             Upload File → Generate QR Code → Share Instantly

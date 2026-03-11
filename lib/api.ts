@@ -112,8 +112,13 @@ export async function uploadToTmpFiles(file: File): Promise<string> {
       );
     }
 
-    // Return the download URL (Requirement 2.2)
-    return data.data.url;
+    // Convert to direct download link by adding /dl/
+    // Example: https://tmpfiles.org/28419924/file.pdf -> https://tmpfiles.org/dl/28419924/file.pdf
+    const url = data.data.url;
+    const directDownloadUrl = url.replace('tmpfiles.org/', 'tmpfiles.org/dl/');
+
+    // Return the direct download URL (Requirement 2.2)
+    return directDownloadUrl;
   } catch (error) {
     // Clear timeout on error
     clearTimeout(timeoutId);
