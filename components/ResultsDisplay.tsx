@@ -1,14 +1,14 @@
 import { useRef, useEffect } from 'react';
 import QRCodeDisplay from './QRCodeDisplay';
 import ShareActions from './ShareActions';
-import QRWarningBanner from './QRWarningBanner';
 
 interface ResultsDisplayProps {
   downloadUrl: string;
   fileName: string;
+  isMultiple?: boolean;
 }
 
-export default function ResultsDisplay({ downloadUrl, fileName }: ResultsDisplayProps) {
+export default function ResultsDisplay({ downloadUrl, fileName, isMultiple = false }: ResultsDisplayProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const qrCodeRef = useRef<HTMLCanvasElement | null>(null);
 
@@ -21,35 +21,32 @@ export default function ResultsDisplay({ downloadUrl, fileName }: ResultsDisplay
   }, [downloadUrl]);
 
   return (
-    <div className="w-full max-w-2xl mx-auto space-y-6 sm:space-y-8 px-4">
-      {/* 60-minute warning banner */}
-      <QRWarningBanner />
-
+    <div className={`${isMultiple ? 'w-full' : 'w-full max-w-2xl mx-auto'} space-y-4 px-4`}>
       {/* File name header */}
       <div className="text-center animate-fade-in">
-        <h2 className="text-xl sm:text-2xl font-semibold text-gray-200 mb-2">
-          File Ready to Share
-        </h2>
-        <p className="text-sm sm:text-base text-gray-400 break-words px-2">{fileName}</p>
+        <h3 className={`${isMultiple ? 'text-base sm:text-lg' : 'text-xl sm:text-2xl'} font-semibold text-gray-200 mb-2`}>
+          {isMultiple ? fileName : 'File Ready to Share'}
+        </h3>
+        {!isMultiple && <p className="text-sm sm:text-base text-gray-400 break-words px-2">{fileName}</p>}
       </div>
 
       {/* Download URL as clickable link */}
-      <div className="bg-gray-800 rounded-xl p-4 sm:p-6 border-2 border-gray-600 shadow-sm transition-all duration-200 hover:shadow-md animate-fade-in" style={{ animationDelay: '0.1s' }}>
-        <label className="block text-xs sm:text-sm font-semibold text-gray-300 mb-3">
+      <div className="bg-gray-800 rounded-xl p-3 sm:p-4 border-2 border-gray-600 shadow-sm transition-all duration-200 hover:shadow-md animate-fade-in" style={{ animationDelay: '0.1s' }}>
+        <label className="block text-xs font-semibold text-gray-300 mb-2">
           Download Link:
         </label>
         <a
           href={downloadUrl}
           target="_blank"
           rel="noopener noreferrer"
-          className="text-blue-400 hover:text-blue-300 hover:underline underline break-all text-xs sm:text-sm font-medium transition-colors duration-200"
+          className="text-blue-400 hover:text-blue-300 hover:underline underline break-all text-xs font-medium transition-colors duration-200"
         >
           {downloadUrl}
         </a>
       </div>
 
       {/* QR Code Display */}
-      <div ref={containerRef} className="flex justify-center bg-gray-800 rounded-xl p-6 sm:p-8 border-2 border-gray-600 shadow-sm transition-all duration-200 hover:shadow-md animate-fade-in" style={{ animationDelay: '0.2s' }}>
+      <div ref={containerRef} className="flex justify-center bg-gray-800 rounded-xl p-4 sm:p-6 border-2 border-gray-600 shadow-sm transition-all duration-200 hover:shadow-md animate-fade-in" style={{ animationDelay: '0.2s' }}>
         <QRCodeDisplay url={downloadUrl} />
       </div>
 

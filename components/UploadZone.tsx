@@ -5,7 +5,7 @@ import { useDropzone } from 'react-dropzone';
 import { validateFileSize, MAX_FILE_SIZE } from '@/lib/api';
 
 interface UploadZoneProps {
-  onFileSelected: (file: File) => void;
+  onFileSelected: (files: File[]) => void;
   disabled: boolean;
 }
 
@@ -28,23 +28,23 @@ const formatFileSize = (bytes: number): string => {
 };
 
 export default function UploadZone({ onFileSelected, disabled }: UploadZoneProps) {
-  const [selectedFile, setSelectedFile] = useState<{ name: string; size: string } | null>(null);
+  const [selectedFiles, setSelectedFiles] = useState<{ name: string; size: string }[]>([]);
 
   const onDrop = useCallback((acceptedFiles: File[]) => {
     if (acceptedFiles.length > 0) {
-      const file = acceptedFiles[0];
-      setSelectedFile({
+      const fileInfos = acceptedFiles.map(file => ({
         name: file.name,
         size: formatFileSize(file.size)
-      });
-      onFileSelected(file);
+      }));
+      setSelectedFiles(fileInfos);
+      onFileSelected(acceptedFiles);
     }
   }, [onFileSelected]);
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
     accept: SUPPORTED_TYPES,
-    multiple: false,
+    multiple: true,
     disabled
   });
 
@@ -74,35 +74,42 @@ export default function UploadZone({ onFileSelected, disabled }: UploadZoneProps
           
           {isDragActive ? (
             <p className="text-base sm:text-lg font-semibold text-gray-200 transition-all duration-200">
-              Drop your file here
+              Drop your files here
             </p>
           ) : (
             <>
               <p className="text-base sm:text-lg font-semibold text-gray-200 transition-all duration-200">
-                Drag & drop a file here, or click to browse
+                Drag & drop files here, or click to browse
               </p>
               <p className="text-xs sm:text-sm text-gray-400 px-2 transition-all duration-200">
                 Supported formats: PDF, DOCX, PNG, JPG, JPEG, GIF
               </p>
               <p className="text-xs text-gray-500 px-2 mt-1">
-                Max file size: 100 MB
+                Max file size: 100 MB • Multiple files supported
               </p>
             </>
           )}
         </div>
       </div>
 
-      {selectedFile && (
-        <div className="mt-4 p-4 bg-gray-800 rounded-lg border-2 border-gray-600 shadow-sm animate-fade-in">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-3 min-w-0 flex-1">
-              <div className="text-2xl flex-shrink-0">📄</div>
-              <div className="min-w-0 flex-1">
-                <p className="font-medium text-gray-200 truncate text-sm sm:text-base">{selectedFile.name}</p>
-                <p className="text-xs sm:text-sm text-gray-400">{selectedFile.size}</p>
+      {selectedFiles.length > 0 && (
+        <div className="mt-4 space-y-2">
+          {selectedFiles.map((file, index) => (
+            <div key={index} className="p-3 bg-gray-800 rounded-lg border-2 border-gray-600 shadow-sm animate-fade-in">
+              <div className="flex items-center space-x-3">
+                <div className="text-xl flex-shrink-0">📄</div>
+                <div className="min-w-0 flex-1">
+                  <p className="font-medium text-gray-200 truncate text-sm">{file.name}</p>
+                  <p className="text-xs text-gray-400">{file.size}</p>
+                </div>
               </div>
             </div>
-          </div>
+          ))}
+          {selectedFiles.length > 1 && (
+            <p className="text-xs text-gray-400 text-center mt-2">
+              {selectedFiles.length} files selected
+            </p>
+          )}
         </div>
       )}
     </div>

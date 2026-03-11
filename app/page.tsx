@@ -11,14 +11,19 @@ import { uploadToTmpFiles, UploadError, validateFileSize, isOnline, MAX_FILE_SIZ
  * Application state interface
  * Manages the complete upload and display flow
  */
+interface UploadedFile {
+  fileName: string;
+  fileSize: number;
+  downloadUrl: string;
+}
+
 interface AppState {
   uploadStatus: 'idle' | 'uploading' | 'success' | 'error';
-  downloadUrl: string | null;
-  fileName: string | null;
-  fileSize: number | null;
+  uploadedFiles: UploadedFile[];
   errorMessage: string | null;
   showLoading: boolean;
   uploadProgress: number;
+  currentlyUploading: string | null;
 }
 
 /**
@@ -49,12 +54,11 @@ export default function Home() {
   
   const [state, setState] = useState<AppState>({
     uploadStatus: 'idle',
-    downloadUrl: null,
-    fileName: null,
-    fileSize: null,
+    uploadedFiles: [],
     errorMessage: null,
     showLoading: true,
-    uploadProgress: 0
+    uploadProgress: 0,
+    currentlyUploading: null
   });
 
   /**
@@ -68,99 +72,91 @@ export default function Home() {
 
   /**
    * Handles file selection and initiates upload
-   * Requirement 2.1: Transmit file to Storage_API
-   * Requirement 7.1: Display error for unsupported file types with list
+   * Supports multiple files
    */
-  const handleFileSelected = async (file: File) => {
+  const handleFileSelected = async (files: File[]) => {
     // Check if online
     if (!isOnline()) {
       setState({
+        ...state,
         uploadStatus: 'error',
-        downloadUrl: null,
-        fileName: null,
-        fileSize: null,
         errorMessage: 'No internet connection. Please check your connection and try again.',
-        showLoading: false,
         uploadProgress: 0
       });
       return;
     }
 
-    // Validate file type (Requirement 7.1)
-    if (!validateFileType(file)) {
-      setState({
-        uploadStatus: 'error',
-        downloadUrl: null,
-        fileName: null,
-        fileSize: null,
-        errorMessage: 'This file type is not supported. Please upload one of these file types: PDF, DOCX, PNG, JPG, JPEG, or GIF.',
-        showLoading: false,
+    // Validate all files first
+    for (const file of files) {
+      // Validate file type
+      if (!validateFileType(file)) {
+        setState({
+          ...state,
+          uploadStatus: 'error',
+          errorMessage: `"${file.name}" is not supported. Please upload only: PDF, DOCX, PNG, JPG, JPEG, or GIF.`,
+          uploadProgress: 0
+        });
+        return;
+      }
+
+      // Validate file size
+      if (!validateFileSize(file)) {
+        const fileSizeMB = (file.size / (1024 * 1024)).toFixed(2);
+        setState({
+          ...state,
+          uploadStatus: 'error',
+          errorMessage: `"${file.name}" is too large (${fileSizeMB} MB). Maximum file size is 100 MB.`,
+          uploadProgress: 0
+        });
+        return;
+      }
+    }
+
+    // Upload files one by one
+    const uploadedFiles: UploadedFile[] = [...state.uploadedFiles];
+    
+    for (let i = 0; i < files.length; i++) {
+      const file = files[i];
+      
+      setState(prev => ({
+        ...prev,
+        uploadStatus: 'uploading',
+        currentlyUploading: file.name,
+        errorMessage: null,
         uploadProgress: 0
-      });
-      return;
+      }));
+
+      try {
+        const url = await uploadToTmpFiles(file, (progress) => {
+          setState(prev => ({ ...prev, uploadProgress: progress }));
+        });
+        
+        uploadedFiles.push({
+          fileName: file.name,
+          fileSize: file.size,
+          downloadUrl: url
+        });
+      } catch (error) {
+        handleUploadError(error, file.name);
+        return;
+      }
     }
 
-    // Validate file size (client-side check)
-    if (!validateFileSize(file)) {
-      const fileSizeMB = (file.size / (1024 * 1024)).toFixed(2);
-      setState({
-        uploadStatus: 'error',
-        downloadUrl: null,
-        fileName: null,
-        fileSize: null,
-        errorMessage: `Your file is too large (${fileSizeMB} MB). The maximum file size is 100 MB. Please choose a smaller file.`,
-        showLoading: false,
-        uploadProgress: 0
-      });
-      return;
-    }
-
-    // Set uploading state
-    setState({
-      uploadStatus: 'uploading',
-      downloadUrl: null,
-      fileName: file.name,
-      fileSize: file.size,
-      errorMessage: null,
-      showLoading: false,
-      uploadProgress: 0
-    });
-
-    try {
-      // Upload file with progress tracking
-      const url = await uploadToTmpFiles(file, (progress) => {
-        setState(prev => ({ ...prev, uploadProgress: progress }));
-      });
-      handleUploadSuccess(url, file.name);
-    } catch (error) {
-      handleUploadError(error);
-    }
-  };
-
-  /**
-   * Handles successful upload
-   * Requirement 2.2: Receive Download_URL from Storage_API
-   * Requirement 5.3: Display results after upload
-   */
-  const handleUploadSuccess = (url: string, fileName: string) => {
+    // All files uploaded successfully
     setState({
       uploadStatus: 'success',
-      downloadUrl: url,
-      fileName: fileName,
-      fileSize: state.fileSize,
+      uploadedFiles,
       errorMessage: null,
       showLoading: false,
-      uploadProgress: 100
+      uploadProgress: 100,
+      currentlyUploading: null
     });
   };
 
   /**
    * Handles upload errors
-   * Requirement 2.4: Display error messages from Storage_API
-   * Requirement 7: Error handling with user-friendly messages
-   * Requirement 7.5: Display all errors in plain, non-technical language
    */
-  const handleUploadError = (error: unknown) => {
+  const handleUploadError = (error: unknown, fileName?: string) => {
     let errorMessage = 'Something unexpected happened. Please try again.';
 
     if (error instanceof UploadError) {
@@ -169,14 +165,30 @@ export default function Home() {
       errorMessage = error.message;
     }
 
-    setState({
+    if (fileName) {
+      errorMessage = `Failed to upload "${fileName}": ${errorMessage}`;
+    }
+
+    setState(prev => ({
+      ...prev,
       uploadStatus: 'error',
-      downloadUrl: null,
-      fileName: state.fileName,
-      fileSize: state.fileSize,
       errorMessage,
+      uploadProgress: 0,
+      currentlyUploading: null
+    }));
+  };
+
+  /**
+   * Reset to upload more files
+   */
+  const handleUploadMore = () => {
+    setState({
+      uploadStatus: 'idle',
+      uploadedFiles: [],
+      errorMessage: null,
       showLoading: false,
-      uploadProgress: 0
+      uploadProgress: 0,
+      currentlyUploading: null
     });
   };
 
@@ -214,14 +226,37 @@ export default function Home() {
         </div>
 
         {/* Conditional rendering based on upload status */}
-        {state.uploadStatus === 'success' && state.downloadUrl && state.fileName ? (
-          // Display results after successful upload (Requirement 5.3)
-          // Fade-in animation for smooth transition (Requirement 1.3, 2.3)
-          <div className="animate-fade-in">
-            <ResultsDisplay 
-              downloadUrl={state.downloadUrl}
-              fileName={state.fileName}
-            />
+        {state.uploadStatus === 'success' && state.uploadedFiles.length > 0 ? (
+          // Display results after successful upload
+          <div className="animate-fade-in w-full max-w-4xl">
+            <div className="text-center mb-6">
+              <h2 className="text-xl sm:text-2xl font-semibold text-gray-200 mb-2">
+                {state.uploadedFiles.length === 1 ? 'File Ready to Share' : `${state.uploadedFiles.length} Files Ready to Share`}
+              </h2>
+              <p className="text-sm text-gray-400">⏰ Each QR code will work for 60 minutes</p>
+            </div>
+
+            {/* Grid layout for multiple files */}
+            <div className={`grid gap-6 ${state.uploadedFiles.length === 1 ? 'grid-cols-1 max-w-2xl mx-auto' : 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3'}`}>
+              {state.uploadedFiles.map((file, index) => (
+                <ResultsDisplay
+                  key={index}
+                  downloadUrl={file.downloadUrl}
+                  fileName={file.fileName}
+                  isMultiple={state.uploadedFiles.length > 1}
+                />
+              ))}
+            </div>
+
+            {/* Upload more button */}
+            <div className="text-center mt-8">
+              <button
+                onClick={handleUploadMore}
+                className="px-6 py-3 bg-gray-700 text-white rounded-lg hover:bg-gray-600 active:bg-gray-800 transition-all duration-200 font-semibold shadow-md hover:shadow-lg hover:scale-[1.02] active:scale-[0.98] text-sm sm:text-base border border-gray-500"
+              >
+                Upload More Files
+              </button>
+            </div>
           </div>
         ) : (
           // Display upload zone before/during upload (Requirement 5.2)
@@ -231,7 +266,7 @@ export default function Home() {
               disabled={state.uploadStatus === 'uploading'}
             />
 
-            {/* Display uploading status (Requirement 1.3, 2.3) */}
+            {/* Display uploading status */}
             {state.uploadStatus === 'uploading' && (
               <div className="mt-6 text-center animate-fade-in">
                 <div className="relative inline-block">
@@ -243,7 +278,9 @@ export default function Home() {
                   </div>
                 </div>
                 <p className="mt-4 text-gray-200 font-semibold text-lg">Uploading...</p>
-                <p className="mt-1 text-gray-400 text-sm">Please wait while we process your file</p>
+                {state.currentlyUploading && (
+                  <p className="mt-1 text-gray-400 text-sm">{state.currentlyUploading}</p>
+                )}
                 
                 {/* Progress bar */}
                 <div className="mt-4 w-full max-w-md mx-auto">
