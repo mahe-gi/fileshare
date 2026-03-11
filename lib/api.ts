@@ -178,9 +178,16 @@ async function uploadToTmpFilesInternal(
       );
     }
 
-    // Convert to direct download link by adding /dl/
+    // Convert to direct download link by adding /dl/ and ensure HTTPS
     const url = data.data.url;
-    const directDownloadUrl = url.replace('tmpfiles.org/', 'tmpfiles.org/dl/');
+    let directDownloadUrl = url.replace('tmpfiles.org/', 'tmpfiles.org/dl/');
+    
+    // Ensure HTTPS protocol
+    if (directDownloadUrl.startsWith('http://')) {
+      directDownloadUrl = directDownloadUrl.replace('http://', 'https://');
+    } else if (!directDownloadUrl.startsWith('https://')) {
+      directDownloadUrl = 'https://' + directDownloadUrl.replace(/^\/+/, '');
+    }
 
     // Complete progress
     if (onProgress) onProgress(100);
