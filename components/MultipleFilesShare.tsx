@@ -36,6 +36,12 @@ export default function MultipleFilesShare({ files }: MultipleFilesShareProps) {
 
         if (!response.ok) {
           console.error('API error:', data);
+          
+          // Handle specific error cases
+          if (response.status === 429) {
+            throw new Error('The service is temporarily busy. Please wait a moment and try again.');
+          }
+          
           throw new Error(data.details || 'Failed to create share link');
         }
 
