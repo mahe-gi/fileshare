@@ -37,3 +37,7 @@ next-env.d.ts
 *.md
 !README.md
 *.txt
+
+# IDE and editor folders
+.kiro
+.vscode
