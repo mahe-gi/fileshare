@@ -4,6 +4,7 @@ import { useState } from 'react';
 import Image from 'next/image';
 import UploadZone from '@/components/UploadZone';
 import ResultsDisplay from '@/components/ResultsDisplay';
+import MultipleFilesShare from '@/components/MultipleFilesShare';
 import LoadingScreen from '@/components/LoadingScreen';
 import Footer from '@/components/Footer';
 import { uploadToTmpFiles, UploadError, validateFileSize, isOnline } from '@/lib/api';
@@ -255,23 +256,20 @@ export default function Home() {
               <p className="text-xs text-gray-500">Each file has its own simple QR code</p>
             </div>
 
-            {/* Grid layout for files - each with its own QR code */}
-            <div className={`grid gap-6 mb-8 ${
-              state.uploadedFiles.length === 1 
-                ? 'grid-cols-1 max-w-2xl mx-auto' 
-                : state.uploadedFiles.length === 2
-                ? 'grid-cols-1 md:grid-cols-2 max-w-4xl mx-auto'
-                : 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3'
-            }`}>
-              {state.uploadedFiles.map((file, index) => (
+            {/* Grid layout for files - each with its own QR code OR single QR for multiple */}
+            {state.uploadedFiles.length === 1 ? (
+              // Single file - direct QR code
+              <div className="max-w-2xl mx-auto">
                 <ResultsDisplay
-                  key={index}
-                  downloadUrl={file.downloadUrl}
-                  fileName={file.fileName}
-                  isMultiple={state.uploadedFiles.length > 1}
+                  downloadUrl={state.uploadedFiles[0].downloadUrl}
+                  fileName={state.uploadedFiles[0].fileName}
+                  isMultiple={false}
                 />
-              ))}
-            </div>
+              </div>
+            ) : (
+              // Multiple files - create gist and show single QR
+              <MultipleFilesShare files={state.uploadedFiles} />
+            )}
 
             {/* Action buttons */}
             <div className="flex flex-col sm:flex-row gap-3 justify-center items-center">

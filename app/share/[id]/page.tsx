@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState, Suspense } from 'react';
-import { useParams, useSearchParams } from 'next/navigation';
+import { useParams } from 'next/navigation';
 
 interface FileData {
   fileName: string;
@@ -11,47 +11,49 @@ interface FileData {
 
 function SharePageContent() {
   const params = useParams();
-  const searchParams = useSearchParams();
   const [files, setFiles] = useState<FileData[]>([]);
   const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    try {
-      const id = params.id as string;
-      if (!id) {
-        setError('No share ID found');
-        return;
-      }
-
-      // First try to get from URL parameter (for cross-device sharing)
-      const dataParam = searchParams.get('d');
-      if (dataParam) {
-        try {
-          const decoded = atob(dataParam);
-          const filesData = JSON.parse(decoded);
-          setFiles(filesData);
-          
-          // Also store in localStorage for future access
-          localStorage.setItem(`share_${id}`, JSON.stringify(filesData));
+    async function loadFiles() {
+      try {
+        const id = params.id as string;
+        if (!id) {
+          setError('No share ID found');
+          setLoading(false);
           return;
-        } catch (e) {
-          // If URL param fails, try localStorage
         }
-      }
 
-      // Fallback to localStorage (for same device)
-      const stored = localStorage.getItem(`share_${id}`);
-      if (!stored) {
-        setError('Share link expired or not found. Please generate a new QR code.');
-        return;
-      }
+        // Fetch from GitHub Gist
+        const response = await fetch(`https://api.github.com/gists/${id}`);
+        
+        if (!response.ok) {
+          setError('Share link not found or expired');
+          setLoading(false);
+          return;
+        }
 
-      const filesData = JSON.parse(stored);
-      setFiles(filesData);
-    } catch (err) {
-      setError('Invalid share link');
+        const gist = await response.json();
+        const fileContent = gist.files['files.json']?.content;
+        
+        if (!fileContent) {
+          setError('Invalid share link');
+          setLoading(false);
+          return;
+        }
+
+        const filesData = JSON.parse(fileContent);
+        setFiles(filesData);
+        setLoading(false);
+      } catch (err) {
+        setError('Failed to load files');
+        setLoading(false);
+      }
     }
-  }, [params, searchParams]);
+
+    loadFiles();
+  }, [params]);
 
   const formatFileSize = (bytes: number): string => {
     if (bytes === 0) return '0 Bytes';
@@ -60,6 +62,17 @@ function SharePageContent() {
     const i = Math.floor(Math.log(bytes) / Math.log(k));
     return Math.round(bytes / Math.pow(k, i) * 100) / 100 + ' ' + sizes[i];
   };
+
+  if (loading) {
+    return (
+      <main className="min-h-screen flex items-center justify-center p-4 bg-gradient-to-br from-gray-900 via-black to-gray-800">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-16 w-16 border-4 border-gray-700 border-t-gray-300 mx-auto mb-4"></div>
+          <p className="text-gray-400">Loading files...</p>
+        </div>
+      </main>
+    );
+  }
 
   if (error) {
     return (
