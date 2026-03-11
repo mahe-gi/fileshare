@@ -14,6 +14,11 @@ export interface TmpFilesResponse {
 }
 
 /**
+ * Upload progress callback type
+ */
+export type ProgressCallback = (progress: number) => void;
+
+/**
  * Error types for upload operations
  */
 export type UploadErrorType =
@@ -38,20 +43,61 @@ export class UploadError extends Error {
 }
 
 /**
- * Uploads a file to tmpfiles.org and returns the download URL
- * 
- * Requirements:
- * - 2.1: Transmits file to Storage_API
- * - 2.2: Receives Download_URL from Storage_API
- * - 2.3: Completes upload within 10 seconds for files under 10MB
- * - 2.4: Handles API error responses
- * - 2.5: Respects maximum file size limit
- * 
- * @param file - The file to upload
- * @returns Promise resolving to the download URL
- * @throws UploadError with user-friendly message
+ * Maximum file size in bytes (100 MB)
  */
-export async function uploadToTmpFiles(file: File): Promise<string> {
+export const MAX_FILE_SIZE = 100 * 1024 * 1024;
+
+/**
+ * Validates file size before upload
+ */
+export function validateFileSize(file: File): boolean {
+  return file.size <= MAX_FILE_SIZE;
+}
+
+/**
+ * Checks if user is online
+ */
+export function isOnline(): boolean {
+  return navigator.onLine;
+}
+
+/**
+ * Uploads a file with retry logic and progress tracking
+ */
+async function uploadWithRetry(
+  file: File,
+  onProgress?: ProgressCallback,
+  retryCount = 0,
+  maxRetries = 3
+): Promise<string> {
+  try {
+    return await uploadToTmpFilesInternal(file, onProgress);
+  } catch (error) {
+    // Don't retry for file size errors or if max retries reached
+    if (error instanceof UploadError && error.type === 'file_too_large') {
+      throw error;
+    }
+    
+    if (retryCount < maxRetries) {
+      // Wait before retry (exponential backoff: 1s, 2s, 4s)
+      const delay = Math.pow(2, retryCount) * 1000;
+      await new Promise(resolve => setTimeout(resolve, delay));
+      
+      // Retry
+      return uploadWithRetry(file, onProgress, retryCount + 1, maxRetries);
+    }
+    
+    throw error;
+  }
+}
+
+/**
+ * Internal upload function with progress tracking
+ */
+async function uploadToTmpFilesInternal(
+  file: File,
+  onProgress?: ProgressCallback
+): Promise<string> {
   // Create FormData for file upload
   const formData = new FormData();
   formData.append('file', file);
@@ -64,6 +110,18 @@ export async function uploadToTmpFiles(file: File): Promise<string> {
   const timeoutId = setTimeout(() => controller.abort(), timeoutMs);
 
   try {
+    // Simulate progress for better UX (since tmpfiles.org doesn't support real progress)
+    let progressInterval: NodeJS.Timeout | null = null;
+    if (onProgress) {
+      let currentProgress = 0;
+      progressInterval = setInterval(() => {
+        if (currentProgress < 90) {
+          currentProgress += Math.random() * 10;
+          onProgress(Math.min(currentProgress, 90));
+        }
+      }, 300);
+    }
+
     // Make API request to tmpfiles.org
     const response = await fetch('https://tmpfiles.org/api/v1/upload', {
       method: 'POST',
@@ -71,12 +129,18 @@ export async function uploadToTmpFiles(file: File): Promise<string> {
       signal: controller.signal,
     });
 
+    // Clear progress interval
+    if (progressInterval) {
+      clearInterval(progressInterval);
+      if (onProgress) onProgress(95);
+    }
+
     // Clear timeout on successful response
     clearTimeout(timeoutId);
 
-    // Handle non-OK HTTP responses (Requirement 2.4)
+    // Handle non-OK HTTP responses
     if (!response.ok) {
-      // Check for file size limit error (Requirement 2.5, 7.3)
+      // Check for file size limit error
       if (response.status === 413) {
         throw new UploadError(
           'file_too_large',
@@ -85,7 +149,7 @@ export async function uploadToTmpFiles(file: File): Promise<string> {
         );
       }
 
-      // Check for service unavailable (Requirement 2.4, 7.2)
+      // Check for service unavailable
       if (response.status >= 500) {
         throw new UploadError(
           'api_unavailable',
@@ -94,7 +158,7 @@ export async function uploadToTmpFiles(file: File): Promise<string> {
         );
       }
 
-      // Generic HTTP error (Requirement 7.5)
+      // Generic HTTP error
       throw new UploadError(
         'unknown_error',
         'Something went wrong while uploading your file. Please try again.',
@@ -102,10 +166,10 @@ export async function uploadToTmpFiles(file: File): Promise<string> {
       );
     }
 
-    // Parse API response (Requirement 2.2)
+    // Parse API response
     const data: TmpFilesResponse = await response.json();
 
-    // Validate response structure (Requirement 7.5)
+    // Validate response structure
     if (!data.data || !data.data.url) {
       throw new UploadError(
         'unknown_error',
@@ -115,11 +179,13 @@ export async function uploadToTmpFiles(file: File): Promise<string> {
     }
 
     // Convert to direct download link by adding /dl/
-    // Example: https://tmpfiles.org/28419924/file.pdf -> https://tmpfiles.org/dl/28419924/file.pdf
     const url = data.data.url;
     const directDownloadUrl = url.replace('tmpfiles.org/', 'tmpfiles.org/dl/');
 
-    // Return the direct download URL (Requirement 2.2)
+    // Complete progress
+    if (onProgress) onProgress(100);
+
+    // Return the direct download URL
     return directDownloadUrl;
   } catch (error) {
     // Clear timeout on error
@@ -130,7 +196,7 @@ export async function uploadToTmpFiles(file: File): Promise<string> {
       throw error;
     }
 
-    // Handle timeout error (Requirement 2.3, 7.5)
+    // Handle timeout error
     if (error instanceof Error && error.name === 'AbortError') {
       throw new UploadError(
         'timeout_error',
@@ -139,7 +205,7 @@ export async function uploadToTmpFiles(file: File): Promise<string> {
       );
     }
 
-    // Handle network errors (Requirement 2.4, 7.4)
+    // Handle network errors
     if (error instanceof TypeError) {
       throw new UploadError(
         'network_error',
@@ -148,11 +214,45 @@ export async function uploadToTmpFiles(file: File): Promise<string> {
       );
     }
 
-    // Handle unknown errors (Requirement 7.5)
+    // Handle unknown errors
     throw new UploadError(
       'unknown_error',
       'Something unexpected happened. Please try again.',
       error instanceof Error ? error.message : 'Unknown error'
     );
   }
+}
+
+/**
+ * Main upload function with all reliability features
+ * 
+ * @param file - The file to upload
+ * @param onProgress - Optional callback for progress updates (0-100)
+ * @returns Promise resolving to the download URL
+ * @throws UploadError with user-friendly message
+ */
+export async function uploadToTmpFiles(
+  file: File,
+  onProgress?: ProgressCallback
+): Promise<string> {
+  // Check if online
+  if (!isOnline()) {
+    throw new UploadError(
+      'network_error',
+      'No internet connection. Please check your connection and try again.',
+      'Navigator offline'
+    );
+  }
+
+  // Validate file size
+  if (!validateFileSize(file)) {
+    throw new UploadError(
+      'file_too_large',
+      `Your file is too large (${(file.size / (1024 * 1024)).toFixed(2)} MB). The maximum file size is 100 MB.`,
+      'File size exceeds limit'
+    );
+  }
+
+  // Upload with retry logic
+  return uploadWithRetry(file, onProgress);
 }

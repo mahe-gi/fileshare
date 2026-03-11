@@ -5,7 +5,7 @@ import UploadZone from '@/components/UploadZone';
 import ResultsDisplay from '@/components/ResultsDisplay';
 import LoadingScreen from '@/components/LoadingScreen';
 import Footer from '@/components/Footer';
-import { uploadToTmpFiles, UploadError } from '@/lib/api';
+import { uploadToTmpFiles, UploadError, validateFileSize, isOnline, MAX_FILE_SIZE } from '@/lib/api';
 
 /**
  * Application state interface
@@ -18,6 +18,7 @@ interface AppState {
   fileSize: number | null;
   errorMessage: string | null;
   showLoading: boolean;
+  uploadProgress: number;
 }
 
 /**
@@ -52,7 +53,8 @@ export default function Home() {
     fileName: null,
     fileSize: null,
     errorMessage: null,
-    showLoading: true
+    showLoading: true,
+    uploadProgress: 0
   });
 
   /**
@@ -70,6 +72,20 @@ export default function Home() {
    * Requirement 7.1: Display error for unsupported file types with list
    */
   const handleFileSelected = async (file: File) => {
+    // Check if online
+    if (!isOnline()) {
+      setState({
+        uploadStatus: 'error',
+        downloadUrl: null,
+        fileName: null,
+        fileSize: null,
+        errorMessage: 'No internet connection. Please check your connection and try again.',
+        showLoading: false,
+        uploadProgress: 0
+      });
+      return;
+    }
+
     // Validate file type (Requirement 7.1)
     if (!validateFileType(file)) {
       setState({
@@ -78,7 +94,23 @@ export default function Home() {
         fileName: null,
         fileSize: null,
         errorMessage: 'This file type is not supported. Please upload one of these file types: PDF, DOCX, PNG, JPG, JPEG, or GIF.',
-        showLoading: false
+        showLoading: false,
+        uploadProgress: 0
+      });
+      return;
+    }
+
+    // Validate file size (client-side check)
+    if (!validateFileSize(file)) {
+      const fileSizeMB = (file.size / (1024 * 1024)).toFixed(2);
+      setState({
+        uploadStatus: 'error',
+        downloadUrl: null,
+        fileName: null,
+        fileSize: null,
+        errorMessage: `Your file is too large (${fileSizeMB} MB). The maximum file size is 100 MB. Please choose a smaller file.`,
+        showLoading: false,
+        uploadProgress: 0
       });
       return;
     }
@@ -90,12 +122,15 @@ export default function Home() {
       fileName: file.name,
       fileSize: file.size,
       errorMessage: null,
-      showLoading: false
+      showLoading: false,
+      uploadProgress: 0
     });
 
     try {
-      // Upload file to tmpfiles.org (Requirements 2.1, 2.2)
-      const url = await uploadToTmpFiles(file);
+      // Upload file with progress tracking
+      const url = await uploadToTmpFiles(file, (progress) => {
+        setState(prev => ({ ...prev, uploadProgress: progress }));
+      });
       handleUploadSuccess(url, file.name);
     } catch (error) {
       handleUploadError(error);
@@ -114,7 +149,8 @@ export default function Home() {
       fileName: fileName,
       fileSize: state.fileSize,
       errorMessage: null,
-      showLoading: false
+      showLoading: false,
+      uploadProgress: 100
     });
   };
 
@@ -139,7 +175,8 @@ export default function Home() {
       fileName: state.fileName,
       fileSize: state.fileSize,
       errorMessage,
-      showLoading: false
+      showLoading: false,
+      uploadProgress: 0
     });
   };
 
@@ -207,6 +244,17 @@ export default function Home() {
                 </div>
                 <p className="mt-4 text-gray-200 font-semibold text-lg">Uploading...</p>
                 <p className="mt-1 text-gray-400 text-sm">Please wait while we process your file</p>
+                
+                {/* Progress bar */}
+                <div className="mt-4 w-full max-w-md mx-auto">
+                  <div className="h-2 bg-gray-800 rounded-full overflow-hidden border border-gray-700">
+                    <div 
+                      className="h-full bg-gradient-to-r from-gray-500 to-gray-300 transition-all duration-300 ease-out"
+                      style={{ width: `${state.uploadProgress}%` }}
+                    ></div>
+                  </div>
+                  <p className="text-gray-400 text-xs mt-2">{Math.round(state.uploadProgress)}%</p>
+                </div>
               </div>
             )}
 
@@ -220,7 +268,7 @@ export default function Home() {
                       <h3 className="font-semibold text-red-400 mb-2 text-base sm:text-lg">Upload Failed</h3>
                       <p className="text-red-300 text-sm sm:text-base break-words">{state.errorMessage}</p>
                       <button
-                        onClick={() => setState({ ...state, uploadStatus: 'idle', errorMessage: null })}
+                        onClick={() => setState({ ...state, uploadStatus: 'idle', errorMessage: null, uploadProgress: 0 })}
                         className="mt-4 px-4 py-2 text-sm font-medium text-red-400 hover:text-red-300 hover:bg-gray-700 active:bg-gray-600 rounded-md transition-all duration-200 hover:shadow-sm border border-red-500"
                       >
                         Try again

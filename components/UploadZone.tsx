@@ -2,6 +2,7 @@
 
 import { useCallback, useState } from 'react';
 import { useDropzone } from 'react-dropzone';
+import { validateFileSize, MAX_FILE_SIZE } from '@/lib/api';
 
 interface UploadZoneProps {
   onFileSelected: (file: File) => void;
