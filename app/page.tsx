@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import Image from 'next/image';
 import UploadZone from '@/components/UploadZone';
 import ResultsDisplay from '@/components/ResultsDisplay';
 import LoadingScreen from '@/components/LoadingScreen';
@@ -221,10 +222,13 @@ export default function Home() {
         <div className="text-center mb-8 animate-fade-in">
           <div className="inline-flex items-center justify-center w-16 h-16 sm:w-20 sm:h-20 bg-gradient-to-br from-gray-700 to-gray-900 rounded-full mb-4 shadow-lg overflow-hidden border-2 border-gray-600">
             {trainerImageUrl ? (
-              <img 
+              <Image 
                 src={trainerImageUrl} 
                 alt="Manoj Sir" 
+                width={80}
+                height={80}
                 className="w-full h-full object-cover"
+                priority
               />
             ) : (
               <span className="text-3xl sm:text-4xl">📚</span>

@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import Image from 'next/image';
 
 interface LoadingScreenProps {
   onLoadingComplete: () => void;
@@ -51,10 +52,13 @@ export default function LoadingScreen({ onLoadingComplete, trainerImage }: Loadi
         <div className="mb-8 animate-bounce">
           <div className="inline-flex items-center justify-center w-24 h-24 bg-gray-800/50 backdrop-blur-sm rounded-full border-4 border-gray-600 shadow-2xl overflow-hidden">
             {trainerImage ? (
-              <img 
+              <Image 
                 src={trainerImage} 
                 alt="Manoj Sir" 
+                width={96}
+                height={96}
                 className="w-full h-full object-cover"
+                priority
               />
             ) : (
               <span className="text-5xl">🎓</span>
