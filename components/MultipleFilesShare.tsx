@@ -32,16 +32,19 @@ export default function MultipleFilesShare({ files }: MultipleFilesShareProps) {
           body: JSON.stringify({ files }),
         });
 
+        const data = await response.json();
+
         if (!response.ok) {
-          throw new Error('Failed to create share link');
+          console.error('API error:', data);
+          throw new Error(data.details || 'Failed to create share link');
         }
 
-        const data = await response.json();
         const url = `${window.location.origin}/share/${data.id}`;
         setShareUrl(url);
         setLoading(false);
       } catch (err) {
-        setError('Failed to create share link');
+        console.error('Share creation error:', err);
+        setError(err instanceof Error ? err.message : 'Failed to create share link');
         setLoading(false);
       }
     }

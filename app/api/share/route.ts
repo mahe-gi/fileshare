@@ -4,42 +4,41 @@ export async function POST(request: NextRequest) {
   try {
     const { files } = await request.json();
 
-    // Create a GitHub Gist with the files data
-    const gistData = {
-      description: 'Shared files from File Sharing Platform',
-      public: true,
-      files: {
-        'files.json': {
-          content: JSON.stringify(files, null, 2)
-        }
-      }
-    };
+    console.log('Creating share link for', files.length, 'files');
 
-    // Create gist without authentication (anonymous gist)
-    const response = await fetch('https://api.github.com/gists', {
+    // Use dpaste.com as free storage (no auth needed)
+    const response = await fetch('https://dpaste.com/api/v2/', {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json',
-        'Accept': 'application/vnd.github.v3+json',
+        'Content-Type': 'application/x-www-form-urlencoded',
       },
-      body: JSON.stringify(gistData)
+      body: new URLSearchParams({
+        content: JSON.stringify(files),
+        syntax: 'json',
+        expiry_days: '1', // 1 day expiry
+      }),
     });
 
     if (!response.ok) {
-      throw new Error('Failed to create gist');
+      const errorText = await response.text();
+      console.error('dpaste API error:', response.status, errorText);
+      throw new Error(`Failed to create share link: ${response.status}`);
     }
 
-    const gist = await response.json();
+    const pasteUrl = await response.text();
+    // Extract ID from URL (e.g., https://dpaste.com/ABCD -> ABCD)
+    const id = pasteUrl.trim().split('/').pop();
     
-    // Return the gist ID
+    console.log('Share link created successfully:', id);
+    
     return NextResponse.json({ 
-      id: gist.id,
-      url: gist.html_url 
+      id: id,
+      url: pasteUrl 
     });
   } catch (error) {
     console.error('Error creating share link:', error);
     return NextResponse.json(
-      { error: 'Failed to create share link' },
+      { error: 'Failed to create share link', details: error instanceof Error ? error.message : 'Unknown error' },
       { status: 500 }
     );
   }

@@ -25,8 +25,8 @@ function SharePageContent() {
           return;
         }
 
-        // Fetch from GitHub Gist
-        const response = await fetch(`https://api.github.com/gists/${id}`);
+        // Fetch from dpaste.com
+        const response = await fetch(`https://dpaste.com/${id}.txt`);
         
         if (!response.ok) {
           setError('Share link not found or expired');
@@ -34,19 +34,12 @@ function SharePageContent() {
           return;
         }
 
-        const gist = await response.json();
-        const fileContent = gist.files['files.json']?.content;
-        
-        if (!fileContent) {
-          setError('Invalid share link');
-          setLoading(false);
-          return;
-        }
-
-        const filesData = JSON.parse(fileContent);
+        const content = await response.text();
+        const filesData = JSON.parse(content);
         setFiles(filesData);
         setLoading(false);
       } catch (err) {
+        console.error('Error loading files:', err);
         setError('Failed to load files');
         setLoading(false);
       }
