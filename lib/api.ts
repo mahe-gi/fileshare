@@ -56,8 +56,10 @@ export async function uploadToTmpFiles(file: File): Promise<string> {
   const formData = new FormData();
   formData.append('file', file);
 
-  // Set timeout to 10 seconds for files under 10MB (Requirement 2.3)
-  const timeoutMs = 10000;
+  // Set timeout based on file size (more generous for larger files)
+  // 10 seconds base + 2 seconds per MB
+  const fileSizeMB = file.size / (1024 * 1024);
+  const timeoutMs = Math.max(30000, 10000 + (fileSizeMB * 2000)); // Minimum 30 seconds
   const controller = new AbortController();
   const timeoutId = setTimeout(() => controller.abort(), timeoutMs);
 
@@ -132,8 +134,8 @@ export async function uploadToTmpFiles(file: File): Promise<string> {
     if (error instanceof Error && error.name === 'AbortError') {
       throw new UploadError(
         'timeout_error',
-        'The upload is taking too long. Please check your internet connection and try again.',
-        'Request timeout after 10 seconds'
+        'The upload is taking too long. Please check your internet connection and try again with a smaller file or better connection.',
+        'Request timeout'
       );
     }
 

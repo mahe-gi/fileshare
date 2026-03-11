@@ -83,6 +83,9 @@ export default function UploadZone({ onFileSelected, disabled }: UploadZoneProps
               <p className="text-xs sm:text-sm text-gray-400 px-2 transition-all duration-200">
                 Supported formats: PDF, DOCX, PNG, JPG, JPEG, GIF
               </p>
+              <p className="text-xs text-gray-500 px-2 mt-1">
+                Max file size: 100 MB
+              </p>
             </>
           )}
         </div>
