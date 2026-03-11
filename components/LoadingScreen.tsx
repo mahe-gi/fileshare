@@ -4,13 +4,14 @@ import { useEffect, useState } from 'react';
 
 interface LoadingScreenProps {
   onLoadingComplete: () => void;
+  trainerImage?: string; // Optional custom image URL
 }
 
 /**
  * Initial loading screen with thank you message for Manoj sir
  * Displays for 3 seconds before showing main application
  */
-export default function LoadingScreen({ onLoadingComplete }: LoadingScreenProps) {
+export default function LoadingScreen({ onLoadingComplete, trainerImage }: LoadingScreenProps) {
   const [progress, setProgress] = useState(0);
 
   useEffect(() => {
@@ -46,10 +47,18 @@ export default function LoadingScreen({ onLoadingComplete }: LoadingScreenProps)
 
       {/* Content */}
       <div className="relative z-10 text-center px-6 max-w-2xl">
-        {/* Icon */}
+        {/* Icon or Image */}
         <div className="mb-8 animate-bounce">
-          <div className="inline-flex items-center justify-center w-24 h-24 bg-white/20 backdrop-blur-sm rounded-full border-4 border-white/30 shadow-2xl">
-            <span className="text-5xl">🎓</span>
+          <div className="inline-flex items-center justify-center w-24 h-24 bg-white/20 backdrop-blur-sm rounded-full border-4 border-white/30 shadow-2xl overflow-hidden">
+            {trainerImage ? (
+              <img 
+                src={trainerImage} 
+                alt="Manoj Sir" 
+                className="w-full h-full object-cover"
+              />
+            ) : (
+              <span className="text-5xl">🎓</span>
+            )}
           </div>
         </div>
 
@@ -65,15 +74,20 @@ export default function LoadingScreen({ onLoadingComplete }: LoadingScreenProps)
           For Your Invaluable Mentorship & Guidance
         </p>
 
+        {/* Student name */}
+        <p className="text-lg sm:text-xl text-white/70 mb-8 animate-fade-in delay-400 italic">
+          - Mahesh
+        </p>
+
         {/* Decorative line */}
-        <div className="flex items-center justify-center gap-3 mb-8 animate-fade-in delay-400">
+        <div className="flex items-center justify-center gap-3 mb-8 animate-fade-in delay-500">
           <div className="h-px w-16 bg-white/40"></div>
           <span className="text-white/60 text-2xl">✨</span>
           <div className="h-px w-16 bg-white/40"></div>
         </div>
 
         {/* Progress bar */}
-        <div className="w-full max-w-md mx-auto animate-fade-in delay-500">
+        <div className="w-full max-w-md mx-auto animate-fade-in delay-700">
           <div className="h-2 bg-white/20 rounded-full overflow-hidden backdrop-blur-sm">
             <div 
               className="h-full bg-gradient-to-r from-white to-yellow-200 transition-all duration-300 ease-out rounded-full shadow-lg"

@@ -43,6 +43,9 @@ const SUPPORTED_TYPES = {
  * - 5.4: Uses single-page layout
  */
 export default function Home() {
+  // You can add your trainer's image URL here
+  const trainerImageUrl = ''; // Add image URL like: '/manoj-sir.jpg' or 'https://...'
+  
   const [state, setState] = useState<AppState>({
     uploadStatus: 'idle',
     downloadUrl: null,
@@ -74,7 +77,8 @@ export default function Home() {
         downloadUrl: null,
         fileName: null,
         fileSize: null,
-        errorMessage: 'This file type is not supported. Please upload one of these file types: PDF, DOCX, PNG, JPG, JPEG, or GIF.'
+        errorMessage: 'This file type is not supported. Please upload one of these file types: PDF, DOCX, PNG, JPG, JPEG, or GIF.',
+        showLoading: false
       });
       return;
     }
@@ -85,7 +89,8 @@ export default function Home() {
       downloadUrl: null,
       fileName: file.name,
       fileSize: file.size,
-      errorMessage: null
+      errorMessage: null,
+      showLoading: false
     });
 
     try {
@@ -108,7 +113,8 @@ export default function Home() {
       downloadUrl: url,
       fileName: fileName,
       fileSize: state.fileSize,
-      errorMessage: null
+      errorMessage: null,
+      showLoading: false
     });
   };
 
@@ -132,7 +138,8 @@ export default function Home() {
       downloadUrl: null,
       fileName: state.fileName,
       fileSize: state.fileSize,
-      errorMessage
+      errorMessage,
+      showLoading: false
     });
   };
 
@@ -140,15 +147,26 @@ export default function Home() {
     <>
       {/* Initial loading screen with thank you message */}
       {state.showLoading && (
-        <LoadingScreen onLoadingComplete={() => setState({ ...state, showLoading: false })} />
+        <LoadingScreen 
+          onLoadingComplete={() => setState({ ...state, showLoading: false })} 
+          trainerImage={trainerImageUrl}
+        />
       )}
 
       {/* Main application */}
       <main className="min-h-screen flex flex-col items-center justify-center p-4 sm:p-8 bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50">
         {/* Header with trainer branding */}
         <div className="text-center mb-8 animate-fade-in">
-          <div className="inline-flex items-center justify-center w-16 h-16 sm:w-20 sm:h-20 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-full mb-4 shadow-lg">
-            <span className="text-3xl sm:text-4xl">📚</span>
+          <div className="inline-flex items-center justify-center w-16 h-16 sm:w-20 sm:h-20 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-full mb-4 shadow-lg overflow-hidden">
+            {trainerImageUrl ? (
+              <img 
+                src={trainerImageUrl} 
+                alt="Manoj Sir" 
+                className="w-full h-full object-cover"
+              />
+            ) : (
+              <span className="text-3xl sm:text-4xl">📚</span>
+            )}
           </div>
           <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-2 bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 bg-clip-text text-transparent">
             Manoj Sir's File Sharing Platform
