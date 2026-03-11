@@ -92,6 +92,7 @@ function SharePageContent() {
                 {/* Download Button */}
                 <a
                   href={file.downloadUrl}
+                  download
                   target="_blank"
                   rel="noopener noreferrer"
                   className="inline-flex items-center gap-2 px-4 py-2 bg-gray-700 hover:bg-gray-600 text-white rounded-lg transition-all duration-200 font-semibold shadow-md hover:shadow-lg hover:scale-[1.02] active:scale-[0.98] text-sm border border-gray-500"
