@@ -1,6 +1,6 @@
-# QuickShare QR
+# File Sharing Platform
 
-A minimal, single-page web application that enables users to quickly share files via QR codes.
+A professional, single-page web application that enables users to quickly share files via QR codes.
 
 ## Features
 

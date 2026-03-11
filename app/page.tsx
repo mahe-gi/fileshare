@@ -1,7 +1,6 @@
 'use client';
 
 import { useState } from 'react';
-import Image from 'next/image';
 import UploadZone from '@/components/UploadZone';
 import ResultsDisplay from '@/components/ResultsDisplay';
 import MultipleFilesShare from '@/components/MultipleFilesShare';
@@ -51,8 +50,7 @@ const SUPPORTED_TYPES = {
  * - 5.4: Uses single-page layout
  */
 export default function Home() {
-  // You can add your trainer's image URL here
-  const trainerImageUrl = '/manoj-sir.png'; // Add image URL like: '/manoj-sir.jpg' or 'https://...'
+  const brandImageUrl = '/logo.png'; // Add your brand logo here
   
   const [state, setState] = useState<AppState>({
     uploadStatus: 'idle',
@@ -209,169 +207,213 @@ export default function Home() {
 
   return (
     <>
-      {/* Initial loading screen with thank you message */}
+      {/* Initial loading screen */}
       {state.showLoading && (
         <LoadingScreen 
           onLoadingComplete={() => setState({ ...state, showLoading: false })} 
-          trainerImage={trainerImageUrl}
+          brandImage={brandImageUrl}
         />
       )}
 
       {/* Main application */}
-      <main className="min-h-screen flex flex-col items-center justify-center p-4 sm:p-8 bg-gradient-to-br from-gray-900 via-black to-gray-800">
-        {/* Header with trainer branding */}
-        <div className="text-center mb-8 animate-fade-in">
-          <div className="inline-flex items-center justify-center w-16 h-16 sm:w-20 sm:h-20 bg-gradient-to-br from-gray-700 to-gray-900 rounded-full mb-4 shadow-lg overflow-hidden border-2 border-gray-600">
-            {trainerImageUrl ? (
-              <Image 
-                src={trainerImageUrl} 
-                alt="Manoj Sir" 
-                width={80}
-                height={80}
-                className="w-full h-full object-cover"
-                priority
-              />
-            ) : (
-              <span className="text-3xl sm:text-4xl">📚</span>
-            )}
-          </div>
-          <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-2 bg-gradient-to-r from-gray-200 via-white to-gray-300 bg-clip-text text-transparent">
-             File Sharing Platform
-          </h1>
-          <p className="text-sm sm:text-base text-gray-300 max-w-xl mx-auto px-4">
-            Upload File → Generate QR Code → Share Instantly
-          </p>
-        </div>
-
-        {/* Conditional rendering based on upload status */}
-        {state.uploadStatus === 'success' && state.uploadedFiles.length > 0 ? (
-          // Display results after successful upload
-          <div className="animate-fade-in w-full max-w-6xl px-4">
-            {/* Header */}
-            <div className="text-center mb-8">
-              <h2 className="text-2xl sm:text-3xl font-semibold text-gray-200 mb-3">
-                {state.uploadedFiles.length === 1 ? 'File Ready to Share' : `${state.uploadedFiles.length} Files Ready to Share`}
-              </h2>
-              <p className="text-sm sm:text-base text-gray-400 mb-2">⏰ Links will work for 60 minutes</p>
-              <p className="text-xs text-gray-500">Each file has its own simple QR code</p>
+      <main className="min-h-screen bg-white">
+        {/* Header */}
+        <header className="bg-white border-b border-gray-200 sticky top-0 z-10">
+          <div className="max-w-5xl mx-auto px-4 py-4 sm:py-6">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center">
+                  <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+                  </svg>
+                </div>
+                <div>
+                  <h1 className="text-xl sm:text-2xl font-bold text-gray-900">FileShare</h1>
+                  <p className="text-xs text-gray-500 hidden sm:block">Share files instantly with QR codes</p>
+                </div>
+              </div>
+              {state.uploadedFiles.length > 0 && (
+                <button
+                  onClick={handleClearAndStartOver}
+                  className="text-sm text-gray-600 hover:text-gray-900 font-medium"
+                >
+                  Start Over
+                </button>
+              )}
             </div>
+          </div>
+        </header>
 
-            {/* Grid layout for files - each with its own QR code OR single QR for multiple */}
-            {state.uploadedFiles.length === 1 ? (
-              // Single file - direct QR code
-              <div className="max-w-2xl mx-auto">
+        {/* Main content */}
+        <div className="max-w-5xl mx-auto px-4 py-8 sm:py-12">
+          {state.uploadStatus === 'success' && state.uploadedFiles.length > 0 ? (
+            // Success view
+            <div className="space-y-6">
+              {/* Success message */}
+              <div className="text-center">
+                <div className="inline-flex items-center justify-center w-16 h-16 bg-green-100 rounded-full mb-4">
+                  <svg className="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                  </svg>
+                </div>
+                <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">
+                  {state.uploadedFiles.length === 1 ? 'File Uploaded!' : `${state.uploadedFiles.length} Files Uploaded!`}
+                </h2>
+                <p className="text-gray-600">Your {state.uploadedFiles.length === 1 ? 'file is' : 'files are'} ready to share. Links expire in 60 minutes.</p>
+              </div>
+
+              {/* Files display */}
+              {state.uploadedFiles.length === 1 ? (
                 <ResultsDisplay
                   downloadUrl={state.uploadedFiles[0].downloadUrl}
                   fileName={state.uploadedFiles[0].fileName}
                   isMultiple={false}
                 />
-              </div>
-            ) : (
-              // Multiple files - create gist and show single QR
-              <MultipleFilesShare files={state.uploadedFiles} />
-            )}
+              ) : (
+                <MultipleFilesShare files={state.uploadedFiles} />
+              )}
 
-            {/* Action buttons */}
-            <div className="flex flex-col sm:flex-row gap-3 justify-center items-center">
-              <button
-                onClick={handleAddMoreFiles}
-                className="px-8 py-3 bg-gray-700 text-white rounded-lg hover:bg-gray-600 active:bg-gray-800 transition-all duration-200 font-semibold shadow-md hover:shadow-lg hover:scale-[1.02] active:scale-[0.98] text-sm sm:text-base border border-gray-500"
-              >
-                ➕ Add More Files
-              </button>
-              <button
-                onClick={handleClearAndStartOver}
-                className="px-8 py-3 bg-gray-800 text-gray-300 rounded-lg hover:bg-gray-700 active:bg-gray-900 transition-all duration-200 font-semibold shadow-md hover:shadow-lg hover:scale-[1.02] active:scale-[0.98] text-sm sm:text-base border border-gray-600"
-              >
-                🗑️ Clear All
-              </button>
+              {/* Action button */}
+              <div className="text-center pt-4">
+                <button
+                  onClick={handleAddMoreFiles}
+                  className="inline-flex items-center gap-2 px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium"
+                >
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+                  </svg>
+                  Upload More Files
+                </button>
+              </div>
             </div>
-          </div>
-        ) : (
-          // Display upload zone before/during upload
-          <div className="animate-fade-in w-full max-w-2xl">
-            {/* Show current files count if any */}
-            {state.uploadedFiles.length > 0 && state.uploadStatus === 'idle' && (
-              <div className="mb-6 text-center">
-                <div className="inline-flex items-center gap-3 bg-gray-800 px-5 py-3 rounded-lg border border-gray-600">
-                  <span className="text-gray-300 text-sm font-medium">
-                    📁 {state.uploadedFiles.length} file{state.uploadedFiles.length > 1 ? 's' : ''} uploaded
-                  </span>
-                  <button
-                    onClick={() => setState(prev => ({ ...prev, uploadStatus: 'success' }))}
-                    className="text-xs bg-gray-700 hover:bg-gray-600 text-white px-3 py-1 rounded border border-gray-500 transition-colors"
-                  >
-                    View Files
-                  </button>
-                  <button
-                    onClick={handleClearAndStartOver}
-                    className="text-xs text-red-400 hover:text-red-300 underline"
-                  >
-                    Clear All
-                  </button>
+          ) : (
+            // Upload view
+            <div className="space-y-6">
+              {/* Instructions */}
+              {state.uploadStatus === 'idle' && state.uploadedFiles.length === 0 && (
+                <div className="text-center mb-8">
+                  <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-3">
+                    Share Files Instantly
+                  </h2>
+                  <p className="text-gray-600 max-w-2xl mx-auto">
+                    Upload your files and get a QR code to share. No sign-up required.
+                  </p>
                 </div>
-                <p className="text-xs text-gray-500 mt-2">Add more files below or view your uploaded files</p>
-              </div>
-            )}
+              )}
 
-            <UploadZone 
-              onFileSelected={handleFileSelected}
-              disabled={state.uploadStatus === 'uploading'}
-            />
-
-            {/* Display uploading status */}
-            {state.uploadStatus === 'uploading' && (
-              <div className="mt-6 text-center animate-fade-in">
-                <div className="relative inline-block">
-                  {/* Outer spinning ring */}
-                  <div className="animate-spin rounded-full h-16 w-16 border-4 border-gray-700 border-t-gray-300"></div>
-                  {/* Inner pulsing circle */}
-                  <div className="absolute inset-0 flex items-center justify-center">
-                    <div className="h-8 w-8 bg-gray-400 rounded-full animate-pulse opacity-50"></div>
+              {/* Pending files indicator */}
+              {state.uploadedFiles.length > 0 && state.uploadStatus === 'idle' && (
+                <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center">
+                        <span className="text-white font-bold">{state.uploadedFiles.length}</span>
+                      </div>
+                      <div>
+                        <p className="font-medium text-gray-900">
+                          {state.uploadedFiles.length} file{state.uploadedFiles.length > 1 ? 's' : ''} ready
+                        </p>
+                        <p className="text-sm text-gray-600">Add more or view your files</p>
+                      </div>
+                    </div>
+                    <button
+                      onClick={() => setState(prev => ({ ...prev, uploadStatus: 'success' }))}
+                      className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm font-medium"
+                    >
+                      View Files
+                    </button>
                   </div>
                 </div>
-                <p className="mt-4 text-gray-200 font-semibold text-lg">Uploading...</p>
-                {state.currentlyUploading && (
-                  <p className="mt-1 text-gray-400 text-sm">{state.currentlyUploading}</p>
-                )}
-                
-                {/* Progress bar */}
-                <div className="mt-4 w-full max-w-md mx-auto">
-                  <div className="h-2 bg-gray-800 rounded-full overflow-hidden border border-gray-700">
-                    <div 
-                      className="h-full bg-gradient-to-r from-gray-500 to-gray-300 transition-all duration-300 ease-out"
-                      style={{ width: `${state.uploadProgress}%` }}
-                    ></div>
-                  </div>
-                  <p className="text-gray-400 text-xs mt-2">{Math.round(state.uploadProgress)}%</p>
-                </div>
-              </div>
-            )}
+              )}
 
-            {/* Display error message (Requirement 2.4, 7) */}
-            {state.uploadStatus === 'error' && state.errorMessage && (
-              <div className="mt-6 max-w-2xl w-full px-4 animate-fade-in">
-                <div className="bg-gray-800 border-2 border-red-500 rounded-lg p-4 sm:p-6 shadow-sm">
-                  <div className="flex items-start">
-                    <div className="text-2xl sm:text-3xl mr-3 flex-shrink-0">⚠️</div>
-                    <div className="flex-1 min-w-0">
-                      <h3 className="font-semibold text-red-400 mb-2 text-base sm:text-lg">Upload Failed</h3>
-                      <p className="text-red-300 text-sm sm:text-base break-words">{state.errorMessage}</p>
+              {/* Upload zone */}
+              <UploadZone 
+                onFileSelected={handleFileSelected}
+                disabled={state.uploadStatus === 'uploading'}
+              />
+
+              {/* Uploading status */}
+              {state.uploadStatus === 'uploading' && (
+                <div className="bg-gray-50 border border-gray-200 rounded-lg p-6 text-center">
+                  <div className="inline-flex items-center justify-center w-12 h-12 mb-4">
+                    <div className="animate-spin rounded-full h-12 w-12 border-4 border-gray-200 border-t-blue-600"></div>
+                  </div>
+                  <p className="text-lg font-semibold text-gray-900 mb-1">Uploading...</p>
+                  {state.currentlyUploading && (
+                    <p className="text-sm text-gray-600 mb-4">{state.currentlyUploading}</p>
+                  )}
+                  <div className="max-w-xs mx-auto">
+                    <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
+                      <div 
+                        className="h-full bg-blue-600 transition-all duration-300"
+                        style={{ width: `${state.uploadProgress}%` }}
+                      ></div>
+                    </div>
+                    <p className="text-xs text-gray-500 mt-2">{Math.round(state.uploadProgress)}%</p>
+                  </div>
+                </div>
+              )}
+
+              {/* Error message */}
+              {state.uploadStatus === 'error' && state.errorMessage && (
+                <div className="bg-red-50 border border-red-200 rounded-lg p-4 sm:p-6">
+                  <div className="flex items-start gap-3">
+                    <div className="flex-shrink-0">
+                      <svg className="w-6 h-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                      </svg>
+                    </div>
+                    <div className="flex-1">
+                      <h3 className="font-semibold text-red-900 mb-1">Upload Failed</h3>
+                      <p className="text-sm text-red-700 mb-3">{state.errorMessage}</p>
                       <button
                         onClick={() => setState({ ...state, uploadStatus: 'idle', errorMessage: null, uploadProgress: 0 })}
-                        className="mt-4 px-4 py-2 text-sm font-medium text-red-400 hover:text-red-300 hover:bg-gray-700 active:bg-gray-600 rounded-md transition-all duration-200 hover:shadow-sm border border-red-500"
+                        className="text-sm font-medium text-red-600 hover:text-red-700 underline"
                       >
-                        Try again
+                        Try Again
                       </button>
                     </div>
                   </div>
                 </div>
-              </div>
-            )}
-          </div>
-        )}
+              )}
 
-        {/* Footer with dedication */}
+              {/* Features */}
+              {state.uploadStatus === 'idle' && state.uploadedFiles.length === 0 && (
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-8">
+                  <div className="text-center p-4">
+                    <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mx-auto mb-3">
+                      <svg className="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                      </svg>
+                    </div>
+                    <h3 className="font-semibold text-gray-900 mb-1">Secure</h3>
+                    <p className="text-sm text-gray-600">Files are encrypted and auto-delete after 60 minutes</p>
+                  </div>
+                  <div className="text-center p-4">
+                    <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mx-auto mb-3">
+                      <svg className="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                      </svg>
+                    </div>
+                    <h3 className="font-semibold text-gray-900 mb-1">Fast</h3>
+                    <p className="text-sm text-gray-600">Instant upload and QR code generation</p>
+                  </div>
+                  <div className="text-center p-4">
+                    <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mx-auto mb-3">
+                      <svg className="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z" />
+                      </svg>
+                    </div>
+                    <h3 className="font-semibold text-gray-900 mb-1">Simple</h3>
+                    <p className="text-sm text-gray-600">Scan QR code to download on any device</p>
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
+        </div>
+
+        {/* Footer */}
         <Footer />
       </main>
     </>

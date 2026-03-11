@@ -54,21 +54,25 @@ export default function MultipleFilesShare({ files }: MultipleFilesShareProps) {
 
   if (loading) {
     return (
-      <div className="max-w-2xl mx-auto text-center py-12">
-        <div className="animate-spin rounded-full h-16 w-16 border-4 border-gray-700 border-t-gray-300 mx-auto mb-4"></div>
-        <p className="text-gray-400">Creating share link...</p>
+      <div className="text-center py-12">
+        <div className="animate-spin rounded-full h-12 w-12 border-4 border-gray-200 border-t-blue-600 mx-auto mb-4"></div>
+        <p className="text-gray-600">Creating share link...</p>
       </div>
     );
   }
 
   if (error || !shareUrl) {
     return (
-      <div className="max-w-2xl mx-auto text-center py-12">
-        <div className="text-6xl mb-4">⚠️</div>
-        <p className="text-gray-400 mb-4">{error || 'Failed to create share link'}</p>
+      <div className="text-center py-12">
+        <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
+          <svg className="w-8 h-8 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+        </div>
+        <p className="text-gray-600 mb-4">{error || 'Failed to create share link'}</p>
         <button
           onClick={() => window.location.reload()}
-          className="px-6 py-3 bg-gray-700 text-white rounded-lg hover:bg-gray-600 transition-all duration-200"
+          className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium"
         >
           Try Again
         </button>
@@ -77,15 +81,21 @@ export default function MultipleFilesShare({ files }: MultipleFilesShareProps) {
   }
 
   return (
-    <div className="max-w-2xl mx-auto">
+    <div className="space-y-6">
       {/* Files preview */}
-      <div className="bg-gray-800 rounded-xl p-4 border border-gray-600 mb-6 animate-fade-in">
-        <h4 className="text-sm font-semibold text-gray-300 mb-3">Files included ({files.length}):</h4>
+      <div className="bg-gray-50 border border-gray-200 rounded-xl p-4">
+        <h4 className="text-sm font-semibold text-gray-900 mb-3">
+          Files included ({files.length})
+        </h4>
         <div className="space-y-2 max-h-48 overflow-y-auto">
           {files.map((file, index) => (
-            <div key={index} className="flex items-center gap-2 text-xs text-gray-400 bg-gray-900 p-2 rounded">
-              <span>📄</span>
-              <span className="flex-1 truncate">{file.fileName}</span>
+            <div key={index} className="flex items-center gap-3 p-2 bg-white rounded-lg border border-gray-200">
+              <div className="w-8 h-8 bg-blue-100 rounded flex items-center justify-center flex-shrink-0">
+                <svg className="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                </svg>
+              </div>
+              <span className="flex-1 truncate text-sm text-gray-700">{file.fileName}</span>
             </div>
           ))}
         </div>
@@ -94,7 +104,7 @@ export default function MultipleFilesShare({ files }: MultipleFilesShareProps) {
       {/* Single QR code for all files */}
       <ResultsDisplay
         downloadUrl={shareUrl}
-        fileName={`${files.length} Files - Scan to View All`}
+        fileName={`${files.length} Files Package`}
         isMultiple={false}
       />
     </div>

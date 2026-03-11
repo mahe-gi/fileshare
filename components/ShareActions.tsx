@@ -71,20 +71,26 @@ export default function ShareActions({ downloadUrl, qrCodeRef, isCompact = false
   };
 
   return (
-    <div className={`flex ${isCompact ? 'flex-col gap-2 w-full' : 'flex-col sm:flex-row gap-3 w-full max-w-md'}`}>
+    <div className="grid grid-cols-2 gap-3 w-full">
       <button
         onClick={handleCopyToClipboard}
-        className={`${isCompact ? 'flex-1 px-4 py-2 text-xs' : 'flex-1 px-6 py-3 text-sm sm:text-base'} bg-gray-700 text-white rounded-lg hover:bg-gray-600 active:bg-gray-800 transition-all duration-200 font-semibold shadow-md hover:shadow-lg hover:scale-[1.02] active:scale-[0.98] border border-gray-500`}
+        className="flex items-center justify-center gap-2 px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium"
         aria-label="Copy download URL to clipboard"
       >
-        {copySuccess ? '✓ Copied!' : 'Copy Link'}
+        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+        </svg>
+        {copySuccess ? 'Copied!' : 'Copy Link'}
       </button>
       
       <button
         onClick={handleDownloadQR}
-        className={`${isCompact ? 'flex-1 px-4 py-2 text-xs' : 'flex-1 px-6 py-3 text-sm sm:text-base'} bg-gray-700 text-white rounded-lg hover:bg-gray-600 active:bg-gray-800 transition-all duration-200 font-semibold shadow-md hover:shadow-lg hover:scale-[1.02] active:scale-[0.98] border border-gray-500`}
+        className="flex items-center justify-center gap-2 px-6 py-3 bg-white text-gray-700 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors font-medium"
         aria-label="Download QR code as PNG image"
       >
+        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+        </svg>
         Download QR
       </button>
     </div>
