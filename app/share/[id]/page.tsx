@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState, Suspense } from 'react';
-import { useParams } from 'next/navigation';
+import { useParams, useSearchParams } from 'next/navigation';
 
 interface FileData {
   fileName: string;
@@ -11,6 +11,7 @@ interface FileData {
 
 function SharePageContent() {
   const params = useParams();
+  const searchParams = useSearchParams();
   const [files, setFiles] = useState<FileData[]>([]);
   const [error, setError] = useState<string | null>(null);
 
@@ -22,10 +23,26 @@ function SharePageContent() {
         return;
       }
 
-      // Get data from localStorage
+      // First try to get from URL parameter (for cross-device sharing)
+      const dataParam = searchParams.get('d');
+      if (dataParam) {
+        try {
+          const decoded = atob(dataParam);
+          const filesData = JSON.parse(decoded);
+          setFiles(filesData);
+          
+          // Also store in localStorage for future access
+          localStorage.setItem(`share_${id}`, JSON.stringify(filesData));
+          return;
+        } catch (e) {
+          // If URL param fails, try localStorage
+        }
+      }
+
+      // Fallback to localStorage (for same device)
       const stored = localStorage.getItem(`share_${id}`);
       if (!stored) {
-        setError('Share link expired or not found');
+        setError('Share link expired or not found. Please generate a new QR code.');
         return;
       }
 
@@ -34,7 +51,7 @@ function SharePageContent() {
     } catch (err) {
       setError('Invalid share link');
     }
-  }, [params]);
+  }, [params, searchParams]);
 
   const formatFileSize = (bytes: number): string => {
     if (bytes === 0) return '0 Bytes';
@@ -47,10 +64,16 @@ function SharePageContent() {
   if (error) {
     return (
       <main className="min-h-screen flex items-center justify-center p-4 bg-gradient-to-br from-gray-900 via-black to-gray-800">
-        <div className="text-center">
+        <div className="text-center max-w-md">
           <div className="text-6xl mb-4">⚠️</div>
           <h1 className="text-2xl font-bold text-gray-200 mb-2">Error</h1>
-          <p className="text-gray-400">{error}</p>
+          <p className="text-gray-400 mb-4">{error}</p>
+          <a
+            href="/"
+            className="inline-block px-6 py-3 bg-gray-700 text-white rounded-lg hover:bg-gray-600 transition-all duration-200 font-semibold"
+          >
+            Go to Home
+          </a>
         </div>
       </main>
     );

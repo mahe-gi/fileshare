@@ -274,12 +274,17 @@ export default function Home() {
                     // Generate short random ID
                     const id = Math.random().toString(36).substring(2, 8);
                     
-                    // Store files data in localStorage
+                    // Prepare files data
                     const filesData = state.uploadedFiles.map(f => ({
                       fileName: f.fileName,
                       downloadUrl: f.downloadUrl,
                       fileSize: f.fileSize
                     }));
+                    
+                    // Encode data for URL
+                    const encoded = btoa(JSON.stringify(filesData));
+                    
+                    // Store in localStorage as backup
                     localStorage.setItem(`share_${id}`, JSON.stringify(filesData));
                     
                     // Set expiry (60 minutes)
@@ -287,8 +292,8 @@ export default function Home() {
                       localStorage.removeItem(`share_${id}`);
                     }, 60 * 60 * 1000);
                     
-                    // Return short URL
-                    return `${window.location.origin}/share/${id}`;
+                    // Return URL with data parameter for cross-device sharing
+                    return `${window.location.origin}/share/${id}?d=${encoded}`;
                   })()}
                   fileName={`${state.uploadedFiles.length} Files`}
                   isMultiple={false}
