@@ -27,29 +27,29 @@ export default function ResultsDisplay({ downloadUrl, fileName }: ResultsDisplay
 
       {/* File name header */}
       <div className="text-center animate-fade-in">
-        <h2 className="text-xl sm:text-2xl font-semibold text-gray-800 mb-2">
+        <h2 className="text-xl sm:text-2xl font-semibold text-gray-200 mb-2">
           File Ready to Share
         </h2>
-        <p className="text-sm sm:text-base text-gray-600 break-words px-2">{fileName}</p>
+        <p className="text-sm sm:text-base text-gray-400 break-words px-2">{fileName}</p>
       </div>
 
       {/* Download URL as clickable link */}
-      <div className="bg-white rounded-xl p-4 sm:p-6 border-2 border-gray-200 shadow-sm transition-all duration-200 hover:shadow-md animate-fade-in" style={{ animationDelay: '0.1s' }}>
-        <label className="block text-xs sm:text-sm font-semibold text-gray-700 mb-3">
+      <div className="bg-gray-800 rounded-xl p-4 sm:p-6 border-2 border-gray-600 shadow-sm transition-all duration-200 hover:shadow-md animate-fade-in" style={{ animationDelay: '0.1s' }}>
+        <label className="block text-xs sm:text-sm font-semibold text-gray-300 mb-3">
           Download Link:
         </label>
         <a
           href={downloadUrl}
           target="_blank"
           rel="noopener noreferrer"
-          className="text-blue-600 hover:text-blue-800 hover:underline underline break-all text-xs sm:text-sm font-medium transition-colors duration-200"
+          className="text-blue-400 hover:text-blue-300 hover:underline underline break-all text-xs sm:text-sm font-medium transition-colors duration-200"
         >
           {downloadUrl}
         </a>
       </div>
 
       {/* QR Code Display */}
-      <div ref={containerRef} className="flex justify-center bg-white rounded-xl p-6 sm:p-8 border-2 border-gray-200 shadow-sm transition-all duration-200 hover:shadow-md animate-fade-in" style={{ animationDelay: '0.2s' }}>
+      <div ref={containerRef} className="flex justify-center bg-gray-800 rounded-xl p-6 sm:p-8 border-2 border-gray-600 shadow-sm transition-all duration-200 hover:shadow-md animate-fade-in" style={{ animationDelay: '0.2s' }}>
         <QRCodeDisplay url={downloadUrl} />
       </div>
 

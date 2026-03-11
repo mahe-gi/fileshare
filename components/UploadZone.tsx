@@ -55,11 +55,11 @@ export default function UploadZone({ onFileSelected, disabled }: UploadZoneProps
           border-2 border-dashed rounded-xl p-8 sm:p-12 text-center cursor-pointer
           transition-all duration-300 ease-in-out
           ${isDragActive 
-            ? 'border-indigo-500 bg-indigo-50 scale-[1.02] shadow-lg' 
-            : 'border-purple-300 hover:border-indigo-400 hover:shadow-md bg-white'
+            ? 'border-gray-400 bg-gray-800 scale-[1.02] shadow-lg' 
+            : 'border-gray-600 hover:border-gray-400 hover:shadow-md bg-gray-900'
           }
           ${disabled 
-            ? 'opacity-50 cursor-not-allowed bg-gray-100 hover:border-purple-300 hover:shadow-none scale-100' 
+            ? 'opacity-50 cursor-not-allowed bg-gray-800 hover:border-gray-600 hover:shadow-none scale-100' 
             : ''
           }
         `}
@@ -72,15 +72,15 @@ export default function UploadZone({ onFileSelected, disabled }: UploadZoneProps
           </div>
           
           {isDragActive ? (
-            <p className="text-base sm:text-lg font-semibold text-indigo-600 transition-all duration-200">
+            <p className="text-base sm:text-lg font-semibold text-gray-200 transition-all duration-200">
               Drop your file here
             </p>
           ) : (
             <>
-              <p className="text-base sm:text-lg font-semibold text-gray-700 transition-all duration-200">
+              <p className="text-base sm:text-lg font-semibold text-gray-200 transition-all duration-200">
                 Drag & drop a file here, or click to browse
               </p>
-              <p className="text-xs sm:text-sm text-gray-500 px-2 transition-all duration-200">
+              <p className="text-xs sm:text-sm text-gray-400 px-2 transition-all duration-200">
                 Supported formats: PDF, DOCX, PNG, JPG, JPEG, GIF
               </p>
             </>
@@ -89,13 +89,13 @@ export default function UploadZone({ onFileSelected, disabled }: UploadZoneProps
       </div>
 
       {selectedFile && (
-        <div className="mt-4 p-4 bg-white rounded-lg border-2 border-gray-200 shadow-sm animate-fade-in">
+        <div className="mt-4 p-4 bg-gray-800 rounded-lg border-2 border-gray-600 shadow-sm animate-fade-in">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-3 min-w-0 flex-1">
               <div className="text-2xl flex-shrink-0">📄</div>
               <div className="min-w-0 flex-1">
-                <p className="font-medium text-gray-900 truncate text-sm sm:text-base">{selectedFile.name}</p>
-                <p className="text-xs sm:text-sm text-gray-500">{selectedFile.size}</p>
+                <p className="font-medium text-gray-200 truncate text-sm sm:text-base">{selectedFile.name}</p>
+                <p className="text-xs sm:text-sm text-gray-400">{selectedFile.size}</p>
               </div>
             </div>
           </div>

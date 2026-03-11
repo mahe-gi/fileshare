@@ -154,10 +154,10 @@ export default function Home() {
       )}
 
       {/* Main application */}
-      <main className="min-h-screen flex flex-col items-center justify-center p-4 sm:p-8 bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50">
+      <main className="min-h-screen flex flex-col items-center justify-center p-4 sm:p-8 bg-gradient-to-br from-gray-900 via-black to-gray-800">
         {/* Header with trainer branding */}
         <div className="text-center mb-8 animate-fade-in">
-          <div className="inline-flex items-center justify-center w-16 h-16 sm:w-20 sm:h-20 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-full mb-4 shadow-lg overflow-hidden">
+          <div className="inline-flex items-center justify-center w-16 h-16 sm:w-20 sm:h-20 bg-gradient-to-br from-gray-700 to-gray-900 rounded-full mb-4 shadow-lg overflow-hidden border-2 border-gray-600">
             {trainerImageUrl ? (
               <img 
                 src={trainerImageUrl} 
@@ -168,10 +168,10 @@ export default function Home() {
               <span className="text-3xl sm:text-4xl">📚</span>
             )}
           </div>
-          <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-2 bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 bg-clip-text text-transparent">
+          <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-2 bg-gradient-to-r from-gray-200 via-white to-gray-300 bg-clip-text text-transparent">
              File Sharing Platform
           </h1>
-          <p className="text-sm sm:text-base text-gray-600 max-w-xl mx-auto px-4">
+          <p className="text-sm sm:text-base text-gray-300 max-w-xl mx-auto px-4">
             Upload File → Generate QR Code → Share Instantly
           </p>
         </div>
@@ -199,29 +199,29 @@ export default function Home() {
               <div className="mt-6 text-center animate-fade-in">
                 <div className="relative inline-block">
                   {/* Outer spinning ring */}
-                  <div className="animate-spin rounded-full h-16 w-16 border-4 border-indigo-200 border-t-indigo-600"></div>
+                  <div className="animate-spin rounded-full h-16 w-16 border-4 border-gray-700 border-t-gray-300"></div>
                   {/* Inner pulsing circle */}
                   <div className="absolute inset-0 flex items-center justify-center">
-                    <div className="h-8 w-8 bg-indigo-500 rounded-full animate-pulse opacity-50"></div>
+                    <div className="h-8 w-8 bg-gray-400 rounded-full animate-pulse opacity-50"></div>
                   </div>
                 </div>
-                <p className="mt-4 text-gray-700 font-semibold text-lg">Uploading...</p>
-                <p className="mt-1 text-gray-500 text-sm">Please wait while we process your file</p>
+                <p className="mt-4 text-gray-200 font-semibold text-lg">Uploading...</p>
+                <p className="mt-1 text-gray-400 text-sm">Please wait while we process your file</p>
               </div>
             )}
 
             {/* Display error message (Requirement 2.4, 7) */}
             {state.uploadStatus === 'error' && state.errorMessage && (
               <div className="mt-6 max-w-2xl w-full px-4 animate-fade-in">
-                <div className="bg-red-50 border-2 border-red-200 rounded-lg p-4 sm:p-6 shadow-sm">
+                <div className="bg-gray-800 border-2 border-red-500 rounded-lg p-4 sm:p-6 shadow-sm">
                   <div className="flex items-start">
                     <div className="text-2xl sm:text-3xl mr-3 flex-shrink-0">⚠️</div>
                     <div className="flex-1 min-w-0">
-                      <h3 className="font-semibold text-red-800 mb-2 text-base sm:text-lg">Upload Failed</h3>
-                      <p className="text-red-700 text-sm sm:text-base break-words">{state.errorMessage}</p>
+                      <h3 className="font-semibold text-red-400 mb-2 text-base sm:text-lg">Upload Failed</h3>
+                      <p className="text-red-300 text-sm sm:text-base break-words">{state.errorMessage}</p>
                       <button
                         onClick={() => setState({ ...state, uploadStatus: 'idle', errorMessage: null })}
-                        className="mt-4 px-4 py-2 text-sm font-medium text-red-600 hover:text-red-800 hover:bg-red-100 active:bg-red-200 rounded-md transition-all duration-200 hover:shadow-sm"
+                        className="mt-4 px-4 py-2 text-sm font-medium text-red-400 hover:text-red-300 hover:bg-gray-700 active:bg-gray-600 rounded-md transition-all duration-200 hover:shadow-sm border border-red-500"
                       >
                         Try again
                       </button>

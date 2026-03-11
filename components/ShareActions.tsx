@@ -73,7 +73,7 @@ export default function ShareActions({ downloadUrl, qrCodeRef }: ShareActionsPro
     <div className="flex flex-col sm:flex-row gap-3 w-full max-w-md px-4">
       <button
         onClick={handleCopyToClipboard}
-        className="flex-1 px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 active:bg-blue-800 transition-all duration-200 font-semibold shadow-md hover:shadow-lg hover:scale-[1.02] active:scale-[0.98] text-sm sm:text-base"
+        className="flex-1 px-6 py-3 bg-gray-700 text-white rounded-lg hover:bg-gray-600 active:bg-gray-800 transition-all duration-200 font-semibold shadow-md hover:shadow-lg hover:scale-[1.02] active:scale-[0.98] text-sm sm:text-base border border-gray-500"
         aria-label="Copy download URL to clipboard"
       >
         {copySuccess ? '✓ Copied!' : 'Copy Link'}
@@ -81,7 +81,7 @@ export default function ShareActions({ downloadUrl, qrCodeRef }: ShareActionsPro
       
       <button
         onClick={handleDownloadQR}
-        className="flex-1 px-6 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 active:bg-green-800 transition-all duration-200 font-semibold shadow-md hover:shadow-lg hover:scale-[1.02] active:scale-[0.98] text-sm sm:text-base"
+        className="flex-1 px-6 py-3 bg-gray-700 text-white rounded-lg hover:bg-gray-600 active:bg-gray-800 transition-all duration-200 font-semibold shadow-md hover:shadow-lg hover:scale-[1.02] active:scale-[0.98] text-sm sm:text-base border border-gray-500"
         aria-label="Download QR code as PNG image"
       >
         Download QR
