@@ -179,9 +179,9 @@ export default function Home() {
   };
 
   /**
-   * Reset to upload more files
+   * Reset to upload more files (clear all)
    */
-  const handleUploadMore = () => {
+  const handleClearAndStartOver = () => {
     setState({
       uploadStatus: 'idle',
       uploadedFiles: [],
@@ -190,6 +190,19 @@ export default function Home() {
       uploadProgress: 0,
       currentlyUploading: null
     });
+  };
+
+  /**
+   * Add more files to existing list
+   */
+  const handleAddMoreFiles = () => {
+    setState(prev => ({
+      ...prev,
+      uploadStatus: 'idle',
+      errorMessage: null,
+      uploadProgress: 0,
+      currentlyUploading: null
+    }));
   };
 
   return (
@@ -256,19 +269,49 @@ export default function Home() {
               ))}
             </div>
 
-            {/* Upload more button */}
-            <div className="text-center">
+            {/* Action buttons */}
+            <div className="flex flex-col sm:flex-row gap-3 justify-center items-center">
               <button
-                onClick={handleUploadMore}
+                onClick={handleAddMoreFiles}
                 className="px-8 py-3 bg-gray-700 text-white rounded-lg hover:bg-gray-600 active:bg-gray-800 transition-all duration-200 font-semibold shadow-md hover:shadow-lg hover:scale-[1.02] active:scale-[0.98] text-sm sm:text-base border border-gray-500"
               >
-                📤 Upload More Files
+                ➕ Add More Files
+              </button>
+              <button
+                onClick={handleClearAndStartOver}
+                className="px-8 py-3 bg-gray-800 text-gray-300 rounded-lg hover:bg-gray-700 active:bg-gray-900 transition-all duration-200 font-semibold shadow-md hover:shadow-lg hover:scale-[1.02] active:scale-[0.98] text-sm sm:text-base border border-gray-600"
+              >
+                🗑️ Clear All
               </button>
             </div>
           </div>
         ) : (
-          // Display upload zone before/during upload (Requirement 5.2)
-          <div className="animate-fade-in">
+          // Display upload zone before/during upload
+          <div className="animate-fade-in w-full max-w-2xl">
+            {/* Show current files count if any */}
+            {state.uploadedFiles.length > 0 && state.uploadStatus === 'idle' && (
+              <div className="mb-6 text-center">
+                <div className="inline-flex items-center gap-3 bg-gray-800 px-5 py-3 rounded-lg border border-gray-600">
+                  <span className="text-gray-300 text-sm font-medium">
+                    📁 {state.uploadedFiles.length} file{state.uploadedFiles.length > 1 ? 's' : ''} uploaded
+                  </span>
+                  <button
+                    onClick={() => setState(prev => ({ ...prev, uploadStatus: 'success' }))}
+                    className="text-xs bg-gray-700 hover:bg-gray-600 text-white px-3 py-1 rounded border border-gray-500 transition-colors"
+                  >
+                    View Files
+                  </button>
+                  <button
+                    onClick={handleClearAndStartOver}
+                    className="text-xs text-red-400 hover:text-red-300 underline"
+                  >
+                    Clear All
+                  </button>
+                </div>
+                <p className="text-xs text-gray-500 mt-2">Add more files below or view your uploaded files</p>
+              </div>
+            )}
+
             <UploadZone 
               onFileSelected={handleFileSelected}
               disabled={state.uploadStatus === 'uploading'}
