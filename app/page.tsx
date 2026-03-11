@@ -247,30 +247,45 @@ export default function Home() {
               <h2 className="text-2xl sm:text-3xl font-semibold text-gray-200 mb-3">
                 {state.uploadedFiles.length === 1 ? 'File Ready to Share' : `${state.uploadedFiles.length} Files Ready to Share`}
               </h2>
-              <p className="text-sm sm:text-base text-gray-400 mb-2">⏰ Each QR code will work for 60 minutes</p>
-              <p className="text-xs text-gray-500">Scan the QR code or use the buttons to share</p>
+              <p className="text-sm sm:text-base text-gray-400 mb-2">⏰ Links will work for 60 minutes</p>
+              {state.uploadedFiles.length > 1 && (
+                <p className="text-xs text-gray-500">One QR code for all files</p>
+              )}
             </div>
 
-            {/* Grid layout for files */}
-            <div className={`grid gap-6 mb-8 ${
-              state.uploadedFiles.length === 1 
-                ? 'grid-cols-1 max-w-2xl mx-auto' 
-                : state.uploadedFiles.length === 2
-                ? 'grid-cols-1 md:grid-cols-2 max-w-4xl mx-auto'
-                : 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3'
-            }`}>
-              {state.uploadedFiles.map((file, index) => (
+            {/* Single file - show individual QR */}
+            {state.uploadedFiles.length === 1 ? (
+              <div className="max-w-2xl mx-auto">
                 <ResultsDisplay
-                  key={index}
-                  downloadUrl={file.downloadUrl}
-                  fileName={file.fileName}
-                  isMultiple={state.uploadedFiles.length > 1}
+                  downloadUrl={state.uploadedFiles[0].downloadUrl}
+                  fileName={state.uploadedFiles[0].fileName}
+                  isMultiple={false}
                 />
-              ))}
-            </div>
+              </div>
+            ) : (
+              // Multiple files - show one QR for share page
+              <div className="max-w-2xl mx-auto">
+                <ResultsDisplay
+                  downloadUrl={(() => {
+                    // Create share link with all files
+                    const filesData = state.uploadedFiles.map(f => ({
+                      fileName: f.fileName,
+                      downloadUrl: f.downloadUrl,
+                      fileSize: f.fileSize
+                    }));
+                    const encoded = btoa(JSON.stringify(filesData));
+                    return `${window.location.origin}/share?data=${encoded}`;
+                  })()}
+                  fileName={`${state.uploadedFiles.length} Files`}
+                  isMultiple={false}
+                  showFilesList={true}
+                  filesList={state.uploadedFiles}
+                />
+              </div>
+            )}
 
             {/* Action buttons */}
-            <div className="flex flex-col sm:flex-row gap-3 justify-center items-center">
+            <div className="flex flex-col sm:flex-row gap-3 justify-center items-center mt-8">
               <button
                 onClick={handleAddMoreFiles}
                 className="px-8 py-3 bg-gray-700 text-white rounded-lg hover:bg-gray-600 active:bg-gray-800 transition-all duration-200 font-semibold shadow-md hover:shadow-lg hover:scale-[1.02] active:scale-[0.98] text-sm sm:text-base border border-gray-500"
