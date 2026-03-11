@@ -5,7 +5,7 @@ export const metadata: Metadata = {
   title: "FileShare - Instant File Sharing",
   description: "Share files instantly with QR codes. Secure, fast, and simple file sharing solution.",
   icons: {
-    icon: '/favicon.ico',
+    icon: '/favicon.svg',
   },
 };
 
