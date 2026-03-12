@@ -216,28 +216,25 @@ export default function Home() {
       )}
 
       {/* Main application */}
-      <main className="min-h-screen bg-white">
+      <main className="min-h-screen bg-gray-50">
         {/* Header */}
-        <header className="bg-white border-b border-gray-200 sticky top-0 z-10">
-          <div className="max-w-5xl mx-auto px-4 py-4 sm:py-6">
+        <header className="bg-white border-b border-gray-100">
+          <div className="max-w-6xl mx-auto px-4 py-5">
             <div className="flex items-center justify-between">
-              <a href="/" className="flex items-center gap-3">
-                <div className="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center">
-                  <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+              <a href="/" className="flex items-center gap-2.5">
+                <div className="w-9 h-9 bg-blue-600 rounded-lg flex items-center justify-center">
+                  <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
                   </svg>
                 </div>
-                <div>
-                  <h1 className="text-xl sm:text-2xl font-bold text-gray-900">FileShare</h1>
-                  <p className="text-xs text-gray-500 hidden sm:block">Share files instantly with QR codes</p>
-                </div>
+                <span className="text-lg font-bold text-gray-900">FileShare</span>
               </a>
               {state.uploadedFiles.length > 0 && (
                 <button
                   onClick={handleClearAndStartOver}
-                  className="text-sm text-gray-600 hover:text-gray-900 font-medium"
+                  className="text-sm text-gray-600 hover:text-gray-900 font-medium transition-colors"
                 >
-                  Start Over
+                  Upload another
                 </button>
               )}
             </div>
@@ -245,21 +242,21 @@ export default function Home() {
         </header>
 
         {/* Main content */}
-        <div className="max-w-5xl mx-auto px-4 py-8 sm:py-12">
+        <div className="max-w-4xl mx-auto px-4 py-12 sm:py-16">
           {state.uploadStatus === 'success' && state.uploadedFiles.length > 0 ? (
             // Success view
-            <div className="space-y-6">
-              {/* Success message */}
+            <div className="space-y-8 animate-fade-in">
+              {/* Success header */}
               <div className="text-center">
-                <div className="inline-flex items-center justify-center w-16 h-16 bg-green-100 rounded-full mb-4">
-                  <svg className="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                  </svg>
-                </div>
-                <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">
-                  {state.uploadedFiles.length === 1 ? 'File Uploaded!' : `${state.uploadedFiles.length} Files Uploaded!`}
-                </h2>
-                <p className="text-gray-600">Your {state.uploadedFiles.length === 1 ? 'file is' : 'files are'} ready to share. Links expire in 60 minutes.</p>
+                <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-3">
+                  Share the file, using<br />the QR Code.
+                </h1>
+                <p className="text-gray-600">
+                  The file will be available for the next 60 minutes. 
+                  <button onClick={handleAddMoreFiles} className="text-blue-600 hover:text-blue-700 ml-1 font-medium">
+                    Upload another one.
+                  </button>
+                </p>
               </div>
 
               {/* Files display */}
@@ -272,45 +269,34 @@ export default function Home() {
               ) : (
                 <MultipleFilesShare files={state.uploadedFiles} />
               )}
-
-              {/* Action button */}
-              <div className="text-center pt-4">
-                <button
-                  onClick={handleAddMoreFiles}
-                  className="inline-flex items-center gap-2 px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium"
-                >
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
-                  </svg>
-                  Upload More Files
-                </button>
-              </div>
             </div>
           ) : (
             // Upload view
-            <div className="space-y-6">
-              {/* Instructions */}
+            <div className="space-y-8">
+              {/* Hero text */}
               {state.uploadStatus === 'idle' && state.uploadedFiles.length === 0 && (
-                <div className="text-center mb-8">
-                  <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-3">
-                    Share Files Instantly
-                  </h2>
-                  <p className="text-gray-600 max-w-2xl mx-auto">
-                    Upload your files and get a QR code to share. No sign-up required.
+                <div className="text-center animate-fade-in">
+                  <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-gray-900 mb-4 leading-tight">
+                    Drop your file.<br />
+                    Get a <span className="text-blue-600">QR Code</span>.<br />
+                    Share it.
+                  </h1>
+                  <p className="text-gray-600 text-lg">
+                    100 MB max file size. Will be available for 60 minutes.
                   </p>
                 </div>
               )}
 
               {/* Pending files indicator */}
               {state.uploadedFiles.length > 0 && state.uploadStatus === 'idle' && (
-                <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                <div className="bg-blue-50 border border-blue-100 rounded-xl p-5 animate-fade-in">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center">
-                        <span className="text-white font-bold">{state.uploadedFiles.length}</span>
+                      <div className="w-11 h-11 bg-blue-600 rounded-lg flex items-center justify-center">
+                        <span className="text-white font-bold text-lg">{state.uploadedFiles.length}</span>
                       </div>
                       <div>
-                        <p className="font-medium text-gray-900">
+                        <p className="font-semibold text-gray-900">
                           {state.uploadedFiles.length} file{state.uploadedFiles.length > 1 ? 's' : ''} ready
                         </p>
                         <p className="text-sm text-gray-600">Add more or view your files</p>
@@ -318,7 +304,7 @@ export default function Home() {
                     </div>
                     <button
                       onClick={() => setState(prev => ({ ...prev, uploadStatus: 'success' }))}
-                      className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm font-medium"
+                      className="px-5 py-2.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm font-semibold"
                     >
                       View Files
                     </button>
@@ -327,39 +313,58 @@ export default function Home() {
               )}
 
               {/* Upload zone */}
-              <UploadZone 
-                onFileSelected={handleFileSelected}
-                disabled={state.uploadStatus === 'uploading'}
-              />
+              <div className="animate-fade-in delay-200">
+                <UploadZone 
+                  onFileSelected={handleFileSelected}
+                  disabled={state.uploadStatus === 'uploading'}
+                />
+              </div>
 
-              {/* Uploading status */}
+              {/* Uploading status with circular progress */}
               {state.uploadStatus === 'uploading' && (
-                <div className="bg-gray-50 border border-gray-200 rounded-lg p-6 text-center">
-                  <div className="inline-flex items-center justify-center w-12 h-12 mb-4">
-                    <div className="animate-spin rounded-full h-12 w-12 border-4 border-gray-200 border-t-blue-600"></div>
-                  </div>
-                  <p className="text-lg font-semibold text-gray-900 mb-1">Uploading...</p>
-                  {state.currentlyUploading && (
-                    <p className="text-sm text-gray-600 mb-4">{state.currentlyUploading}</p>
-                  )}
-                  <div className="max-w-xs mx-auto">
-                    <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
-                      <div 
-                        className="h-full bg-blue-600 transition-all duration-300"
-                        style={{ width: `${state.uploadProgress}%` }}
-                      ></div>
+                <div className="flex flex-col items-center justify-center py-12 animate-fade-in">
+                  <div className="relative w-32 h-32 mb-6">
+                    <svg className="w-32 h-32 transform -rotate-90">
+                      <circle
+                        cx="64"
+                        cy="64"
+                        r="56"
+                        stroke="currentColor"
+                        strokeWidth="8"
+                        fill="none"
+                        className="text-gray-200"
+                      />
+                      <circle
+                        cx="64"
+                        cy="64"
+                        r="56"
+                        stroke="currentColor"
+                        strokeWidth="8"
+                        fill="none"
+                        strokeDasharray={`${2 * Math.PI * 56}`}
+                        strokeDashoffset={`${2 * Math.PI * 56 * (1 - state.uploadProgress / 100)}`}
+                        className="text-blue-600 transition-all duration-300"
+                        strokeLinecap="round"
+                      />
+                    </svg>
+                    <div className="absolute inset-0 flex items-center justify-center">
+                      <span className="text-2xl font-bold text-blue-600">{Math.round(state.uploadProgress)}%</span>
                     </div>
-                    <p className="text-xs text-gray-500 mt-2">{Math.round(state.uploadProgress)}%</p>
                   </div>
+                  {state.currentlyUploading && (
+                    <p className="text-gray-600 text-center max-w-md">
+                      Uploading <span className="font-medium text-gray-900">{state.currentlyUploading}</span>
+                    </p>
+                  )}
                 </div>
               )}
 
               {/* Error message */}
               {state.uploadStatus === 'error' && state.errorMessage && (
-                <div className="bg-red-50 border border-red-200 rounded-lg p-4 sm:p-6">
+                <div className="bg-red-50 border border-red-100 rounded-xl p-5 animate-fade-in">
                   <div className="flex items-start gap-3">
-                    <div className="flex-shrink-0">
-                      <svg className="w-6 h-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <div className="flex-shrink-0 w-10 h-10 bg-red-100 rounded-lg flex items-center justify-center">
+                      <svg className="w-5 h-5 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                       </svg>
                     </div>
@@ -368,7 +373,7 @@ export default function Home() {
                       <p className="text-sm text-red-700 mb-3">{state.errorMessage}</p>
                       <button
                         onClick={() => setState({ ...state, uploadStatus: 'idle', errorMessage: null, uploadProgress: 0 })}
-                        className="text-sm font-medium text-red-600 hover:text-red-700 underline"
+                        className="text-sm font-semibold text-red-600 hover:text-red-700 underline"
                       >
                         Try Again
                       </button>
@@ -376,45 +381,9 @@ export default function Home() {
                   </div>
                 </div>
               )}
-
-              {/* Features */}
-              {state.uploadStatus === 'idle' && state.uploadedFiles.length === 0 && (
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-8">
-                  <div className="text-center p-4">
-                    <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mx-auto mb-3">
-                      <svg className="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-                      </svg>
-                    </div>
-                    <h3 className="font-semibold text-gray-900 mb-1">Secure</h3>
-                    <p className="text-sm text-gray-600">Files are encrypted and auto-delete after 60 minutes</p>
-                  </div>
-                  <div className="text-center p-4">
-                    <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mx-auto mb-3">
-                      <svg className="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
-                      </svg>
-                    </div>
-                    <h3 className="font-semibold text-gray-900 mb-1">Fast</h3>
-                    <p className="text-sm text-gray-600">Instant upload and QR code generation</p>
-                  </div>
-                  <div className="text-center p-4">
-                    <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mx-auto mb-3">
-                      <svg className="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z" />
-                      </svg>
-                    </div>
-                    <h3 className="font-semibold text-gray-900 mb-1">Simple</h3>
-                    <p className="text-sm text-gray-600">Scan QR code to download on any device</p>
-                  </div>
-                </div>
-              )}
             </div>
           )}
         </div>
-
-        {/* Footer */}
-        <Footer />
       </main>
     </>
   );
