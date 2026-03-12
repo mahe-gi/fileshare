@@ -13,25 +13,11 @@ export default function Footer() {
             <div className="flex items-center gap-2.5 mb-4">
               <div className="w-9 h-9 rounded-lg overflow-hidden">
                 <svg width="36" height="36" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <rect width="40" height="40" rx="8" fill="url(#gradient1)"/>
-                  <g opacity="0.95">
-                    <rect x="8" y="8" width="8" height="8" rx="1.5" fill="white"/>
-                    <rect x="10" y="10" width="4" height="4" rx="0.5" fill="#2563EB"/>
-                    <rect x="24" y="8" width="8" height="8" rx="1.5" fill="white"/>
-                    <rect x="26" y="10" width="4" height="4" rx="0.5" fill="#2563EB"/>
-                    <rect x="8" y="24" width="8" height="8" rx="1.5" fill="white"/>
-                    <rect x="10" y="26" width="4" height="4" rx="0.5" fill="#2563EB"/>
-                  </g>
-                  <g transform="translate(20, 20)">
-                    <circle cx="0" cy="0" r="6" fill="white"/>
-                    <path d="M0 -3L0 3M0 -3L-2 -1M0 -3L2 -1" stroke="#2563EB" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-                  </g>
-                  <defs>
-                    <linearGradient id="gradient1" x1="0" y1="0" x2="40" y2="40" gradientUnits="userSpaceOnUse">
-                      <stop stopColor="#3B82F6"/>
-                      <stop offset="1" stopColor="#2563EB"/>
-                    </linearGradient>
-                  </defs>
+                  <rect width="40" height="40" rx="8" fill="#2563EB"/>
+                  <rect x="10" y="10" width="8" height="8" rx="1.5" fill="white"/>
+                  <rect x="10" y="22" width="8" height="8" rx="1.5" fill="white"/>
+                  <rect x="22" y="10" width="8" height="8" rx="1.5" fill="white"/>
+                  <rect x="22" y="22" width="8" height="8" rx="1.5" fill="white"/>
                 </svg>
               </div>
               <span className="text-lg font-bold text-white">QRFlowX</span>

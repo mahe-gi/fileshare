@@ -51,7 +51,7 @@ const SUPPORTED_TYPES = {
  * - 5.4: Uses single-page layout
  */
 export default function Home() {
-  const brandImageUrl = '/logo.png'; // Add your brand logo here
+  const brandImageUrl = '/logo.svg'; // Add your brand logo here
   
   const [state, setState] = useState<AppState>({
     uploadStatus: 'idle',

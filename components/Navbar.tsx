@@ -47,27 +47,11 @@ export default function Navbar() {
           <Link href="/" className="flex items-center gap-2.5 group">
             <div className="w-9 h-9 rounded-lg overflow-hidden transition-transform group-hover:scale-110">
               <svg width="36" height="36" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <rect width="40" height="40" rx="8" fill="url(#gradient1)"/>
-                <g opacity="0.95">
-                  <rect x="6" y="6" width="7" height="7" rx="1.5" fill="white"/>
-                  <rect x="7.5" y="7.5" width="4" height="4" rx="0.5" fill="#1E40AF"/>
-                  <rect x="6" y="27" width="7" height="7" rx="1.5" fill="white"/>
-                  <rect x="7.5" y="28.5" width="4" height="4" rx="0.5" fill="#1E40AF"/>
-                  <rect x="27" y="6" width="7" height="7" rx="1.5" fill="white"/>
-                  <rect x="28.5" y="7.5" width="4" height="4" rx="0.5" fill="#1E40AF"/>
-                </g>
-                <path d="M15 20 Q20 15, 25 20 T35 20" stroke="white" strokeWidth="2.5" strokeLinecap="round" fill="none" opacity="0.9"/>
-                <path d="M15 24 Q20 19, 25 24 T35 24" stroke="white" strokeWidth="2" strokeLinecap="round" fill="none" opacity="0.7"/>
-                <g transform="translate(28, 28)">
-                  <path d="M0 0 L6 6 M6 0 L0 6" stroke="#FBBF24" strokeWidth="2.5" strokeLinecap="round"/>
-                </g>
-                <defs>
-                  <linearGradient id="gradient1" x1="0" y1="0" x2="40" y2="40" gradientUnits="userSpaceOnUse">
-                    <stop stopColor="#3B82F6"/>
-                    <stop offset="0.5" stopColor="#2563EB"/>
-                    <stop offset="1" stopColor="#1E40AF"/>
-                  </linearGradient>
-                </defs>
+                <rect width="40" height="40" rx="8" fill="#2563EB"/>
+                <rect x="10" y="10" width="8" height="8" rx="1.5" fill="white"/>
+                <rect x="10" y="22" width="8" height="8" rx="1.5" fill="white"/>
+                <rect x="22" y="10" width="8" height="8" rx="1.5" fill="white"/>
+                <rect x="22" y="22" width="8" height="8" rx="1.5" fill="white"/>
               </svg>
             </div>
             <span className="text-lg font-bold text-gray-900">QRFlowX</span>

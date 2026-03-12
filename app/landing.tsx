@@ -43,7 +43,7 @@ export default function LandingPage() {
     '@type': 'Organization',
     name: 'QRFlowX',
     url: 'https://qrflowx.vercel.app',
-    logo: 'https://qrflowx.vercel.app/logo.png',
+    logo: 'https://qrflowx.vercel.app/logo.svg',
     description: 'Free and secure file sharing platform with QR code generation',
     sameAs: [
       'https://twitter.com/qrflowx',
