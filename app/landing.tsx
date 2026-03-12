@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import Footer from '@/components/Footer';
+import Navbar from '@/components/Navbar';
 
 export default function LandingPage() {
   const [email, setEmail] = useState('');
@@ -133,29 +134,10 @@ export default function LandingPage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqData) }}
       />
 
-      <main className="min-h-screen bg-white">
-      {/* Header */}
-      <header className="bg-white border-b border-gray-200">
-        <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4" aria-label="Main navigation">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center" aria-hidden="true">
-                <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
-                </svg>
-              </div>
-              <span className="text-xl font-bold text-gray-900">FileShare</span>
-            </div>
-            <button
-              onClick={handleGetStarted}
-              className="px-4 py-2 text-sm font-medium text-blue-600 hover:text-blue-700"
-              aria-label="Get started with file sharing"
-            >
-              Get Started
-            </button>
-          </div>
-        </nav>
-      </header>
+      {/* Navbar */}
+      <Navbar />
+
+      <main className="min-h-screen bg-white pt-16">
 
       {/* Hero Section */}
       <section className="pt-20 pb-24 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-blue-50 to-white">
@@ -271,7 +253,7 @@ export default function LandingPage() {
       </section>
 
       {/* Features Section */}
-      <section className="py-20 bg-gray-50">
+      <section id="features" className="py-20 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="text-4xl sm:text-5xl font-bold text-gray-900 mb-4">
@@ -677,7 +659,7 @@ export default function LandingPage() {
       </section>
 
       {/* FAQ Section */}
-      <section className="py-20 bg-white">
+      <section id="faq" className="py-20 bg-white">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">

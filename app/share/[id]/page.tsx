@@ -3,6 +3,7 @@
 import { useEffect, useState, Suspense } from 'react';
 import { useParams } from 'next/navigation';
 import Footer from '@/components/Footer';
+import Navbar from '@/components/Navbar';
 
 interface FileData {
   fileName: string;
@@ -118,22 +119,8 @@ function SharePageContent() {
 
   if (loading) {
     return (
-      <main className="min-h-screen bg-white">
-        <header className="bg-white border-b border-gray-200">
-          <div className="max-w-5xl mx-auto px-4 py-4 sm:py-6">
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center">
-                <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
-                </svg>
-              </div>
-              <div>
-                <h1 className="text-xl sm:text-2xl font-bold text-gray-900">FileShare</h1>
-                <p className="text-xs text-gray-500 hidden sm:block">Share files instantly with QR codes</p>
-              </div>
-            </div>
-          </div>
-        </header>
+      <main className="min-h-screen bg-white pt-16">
+        <Navbar />
         
         <div className="flex items-center justify-center min-h-[calc(100vh-200px)] p-4">
           <div className="text-center">
@@ -150,22 +137,8 @@ function SharePageContent() {
 
   if (error) {
     return (
-      <main className="min-h-screen bg-white">
-        <header className="bg-white border-b border-gray-200">
-          <div className="max-w-5xl mx-auto px-4 py-4 sm:py-6">
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center">
-                <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
-                </svg>
-              </div>
-              <div>
-                <h1 className="text-xl sm:text-2xl font-bold text-gray-900">FileShare</h1>
-                <p className="text-xs text-gray-500 hidden sm:block">Share files instantly with QR codes</p>
-              </div>
-            </div>
-          </div>
-        </header>
+      <main className="min-h-screen bg-white pt-16">
+        <Navbar />
 
         <div className="flex items-center justify-center min-h-[calc(100vh-200px)] p-4">
           <div className="text-center max-w-md">
@@ -203,31 +176,9 @@ function SharePageContent() {
   }
 
   return (
-    <main className="min-h-screen bg-white">
-      {/* Header */}
-      <header className="bg-white border-b border-gray-200 sticky top-0 z-10">
-        <div className="max-w-5xl mx-auto px-4 py-4 sm:py-6">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center">
-                <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
-                </svg>
-              </div>
-              <div>
-                <h1 className="text-xl sm:text-2xl font-bold text-gray-900">FileShare</h1>
-                <p className="text-xs text-gray-500 hidden sm:block">Share files instantly with QR codes</p>
-              </div>
-            </div>
-            <a
-              href="/app"
-              className="text-sm text-gray-600 hover:text-gray-900 font-medium"
-            >
-              Upload Files
-            </a>
-          </div>
-        </div>
-      </header>
+    <main className="min-h-screen bg-white pt-16">
+      {/* Navbar */}
+      <Navbar />
 
       {/* Main content */}
       <div className="max-w-5xl mx-auto px-4 py-8 sm:py-12">
@@ -312,22 +263,8 @@ function SharePageContent() {
 export default function SharePage() {
   return (
     <Suspense fallback={
-      <main className="min-h-screen bg-white">
-        <header className="bg-white border-b border-gray-200">
-          <div className="max-w-5xl mx-auto px-4 py-4 sm:py-6">
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center">
-                <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
-                </svg>
-              </div>
-              <div>
-                <h1 className="text-xl sm:text-2xl font-bold text-gray-900">FileShare</h1>
-                <p className="text-xs text-gray-500 hidden sm:block">Share files instantly with QR codes</p>
-              </div>
-            </div>
-          </div>
-        </header>
+      <main className="min-h-screen bg-white pt-16">
+        <Navbar />
         
         <div className="flex items-center justify-center min-h-[calc(100vh-200px)] p-4">
           <div className="text-center">

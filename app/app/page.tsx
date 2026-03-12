@@ -6,6 +6,7 @@ import ResultsDisplay from '@/components/ResultsDisplay';
 import MultipleFilesShare from '@/components/MultipleFilesShare';
 import LoadingScreen from '@/components/LoadingScreen';
 import Footer from '@/components/Footer';
+import Navbar from '@/components/Navbar';
 import { uploadToTmpFiles, UploadError, validateFileSize, isOnline } from '@/lib/api';
 
 /**
@@ -216,30 +217,9 @@ export default function Home() {
       )}
 
       {/* Main application */}
-      <main className="min-h-screen bg-gray-50">
-        {/* Header */}
-        <header className="bg-white border-b border-gray-100">
-          <div className="max-w-6xl mx-auto px-4 py-5">
-            <div className="flex items-center justify-between">
-              <a href="/" className="flex items-center gap-2.5">
-                <div className="w-9 h-9 bg-blue-600 rounded-lg flex items-center justify-center">
-                  <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
-                  </svg>
-                </div>
-                <span className="text-lg font-bold text-gray-900">FileShare</span>
-              </a>
-              {state.uploadedFiles.length > 0 && (
-                <button
-                  onClick={handleClearAndStartOver}
-                  className="text-sm text-gray-600 hover:text-gray-900 font-medium transition-colors"
-                >
-                  Upload another
-                </button>
-              )}
-            </div>
-          </div>
-        </header>
+      <main className="min-h-screen bg-gray-50 pt-16">
+        {/* Navbar */}
+        <Navbar />
 
         {/* Main content */}
         <div className="max-w-4xl mx-auto px-4 py-12 sm:py-16">
