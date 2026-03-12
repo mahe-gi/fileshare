@@ -13,11 +13,20 @@ export default function Footer() {
             <div className="flex items-center gap-2.5 mb-4">
               <div className="w-9 h-9 rounded-lg overflow-hidden">
                 <svg width="36" height="36" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <rect width="40" height="40" rx="8" fill="#2563EB"/>
-                  <rect x="10" y="10" width="8" height="8" rx="1.5" fill="white"/>
-                  <rect x="10" y="22" width="8" height="8" rx="1.5" fill="white"/>
-                  <rect x="22" y="10" width="8" height="8" rx="1.5" fill="white"/>
-                  <rect x="22" y="22" width="8" height="8" rx="1.5" fill="white"/>
+                  <rect width="40" height="40" rx="10" fill="#2563EB"/>
+                  <g transform="translate(8, 8)">
+                    <rect width="7" height="7" rx="1.5" fill="white"/>
+                    <rect x="2" y="2" width="3" height="3" rx="0.5" fill="#2563EB"/>
+                  </g>
+                  <g transform="translate(8, 25)">
+                    <rect width="7" height="7" rx="1.5" fill="white"/>
+                    <rect x="2" y="2" width="3" height="3" rx="0.5" fill="#2563EB"/>
+                  </g>
+                  <g transform="translate(25, 8)">
+                    <rect width="7" height="7" rx="1.5" fill="white"/>
+                    <rect x="2" y="2" width="3" height="3" rx="0.5" fill="#2563EB"/>
+                  </g>
+                  <path d="M17 20 L23 20 M20 17 L20 23" stroke="white" strokeWidth="2.5" strokeLinecap="round"/>
                 </svg>
               </div>
               <span className="text-lg font-bold text-white">QRFlowX</span>
