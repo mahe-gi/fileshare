@@ -1,7 +1,7 @@
 import { MetadataRoute } from 'next';
 
 export default function robots(): MetadataRoute.Robots {
-  const baseUrl = 'https://fileshare.vercel.app';
+  const baseUrl = 'https://qrflowx.vercel.app';
   
   return {
     rules: [

@@ -1,15 +1,15 @@
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'Upload Files - FileShare',
+  title: 'Upload Files - QRFlowX',
   description: 'Upload and share your files instantly with QR codes. Drag and drop files or click to browse. Supports PDF, DOCX, PNG, JPG, GIF up to 100MB.',
   openGraph: {
-    title: 'Upload Files - FileShare',
+    title: 'Upload Files - QRFlowX',
     description: 'Upload and share your files instantly with QR codes.',
-    url: 'https://fileshare.vercel.app/app',
+    url: 'https://qrflowx.vercel.app/app',
   },
   alternates: {
-    canonical: 'https://fileshare.vercel.app/app',
+    canonical: 'https://qrflowx.vercel.app/app',
   },
 };
 

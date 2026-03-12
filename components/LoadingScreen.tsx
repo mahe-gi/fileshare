@@ -52,7 +52,7 @@ export default function LoadingScreen({ onLoadingComplete, brandImage }: Loading
 
         {/* Brand name */}
         <h1 className="text-3xl font-bold text-gray-900 mb-2">
-          FileShare
+          QRFlowX
         </h1>
         
         <p className="text-gray-600 mb-8">

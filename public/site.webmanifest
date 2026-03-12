@@ -1,21 +1,17 @@
 {
-  "name": "FileShare - Instant File Sharing",
-  "short_name": "FileShare",
-  "description": "Share files instantly with QR codes",
+  "name": "QRFlowX - Flow Your Files Through QR",
+  "short_name": "QRFlowX",
+  "description": "Complete suite of free QR code and file sharing tools",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#ffffff",
   "theme_color": "#2563eb",
   "icons": [
     {
-      "src": "/icon-192.png",
-      "sizes": "192x192",
-      "type": "image/png"
-    },
-    {
-      "src": "/icon-512.png",
-      "sizes": "512x512",
-      "type": "image/png"
+      "src": "/logo.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
     }
   ]
 }

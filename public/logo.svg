@@ -1,0 +1,17 @@
+<svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Simple rounded square background -->
+  <rect width="40" height="40" rx="8" fill="#2563EB"/>
+  
+  <!-- Simple QR-inspired squares -->
+  <rect x="8" y="8" width="8" height="8" rx="1.5" fill="white"/>
+  <rect x="8" y="24" width="8" height="8" rx="1.5" fill="white"/>
+  <rect x="24" y="8" width="8" height="8" rx="1.5" fill="white"/>
+  
+  <!-- Simple flow arrow -->
+  <path d="M18 20 L28 20 M28 20 L25 17 M28 20 L25 23" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+  
+  <!-- Simple X accent -->
+  <g transform="translate(26, 26)">
+    <path d="M0 0 L4 4 M4 0 L0 4" stroke="#FBBF24" stroke-width="2" stroke-linecap="round"/>
+  </g>
+</svg>

@@ -1,12 +1,9 @@
 'use client';
 
-import { useState } from 'react';
 import Footer from '@/components/Footer';
 import Navbar from '@/components/Navbar';
 
 export default function LandingPage() {
-  const [email, setEmail] = useState('');
-
   const handleGetStarted = () => {
     window.location.href = '/app';
   };
@@ -15,7 +12,7 @@ export default function LandingPage() {
   const structuredData = {
     '@context': 'https://schema.org',
     '@type': 'WebApplication',
-    name: 'FileShare',
+    name: 'QRFlowX',
     applicationCategory: 'UtilityApplication',
     operatingSystem: 'Any',
     offers: {
@@ -24,8 +21,8 @@ export default function LandingPage() {
       priceCurrency: 'USD',
     },
     description: 'Share files instantly with QR codes. Free, secure, and fast file sharing. No sign-up required.',
-    url: 'https://fileshare.vercel.app',
-    screenshot: 'https://fileshare.vercel.app/og-image.png',
+    url: 'https://qrflowx.vercel.app',
+    screenshot: 'https://qrflowx.vercel.app/og-image.png',
     aggregateRating: {
       '@type': 'AggregateRating',
       ratingValue: '4.8',
@@ -44,13 +41,13 @@ export default function LandingPage() {
   const organizationData = {
     '@context': 'https://schema.org',
     '@type': 'Organization',
-    name: 'FileShare',
-    url: 'https://fileshare.vercel.app',
-    logo: 'https://fileshare.vercel.app/logo.png',
+    name: 'QRFlowX',
+    url: 'https://qrflowx.vercel.app',
+    logo: 'https://qrflowx.vercel.app/logo.png',
     description: 'Free and secure file sharing platform with QR code generation',
     sameAs: [
-      'https://twitter.com/fileshare',
-      'https://github.com/mahe-gi/fileshare',
+      'https://twitter.com/qrflowx',
+      'https://github.com/qrflowx',
     ],
   };
 
@@ -62,7 +59,7 @@ export default function LandingPage() {
         '@type': 'ListItem',
         position: 1,
         name: 'Home',
-        item: 'https://fileshare.vercel.app',
+        item: 'https://qrflowx.vercel.app',
       },
     ],
   };
@@ -73,10 +70,10 @@ export default function LandingPage() {
     mainEntity: [
       {
         '@type': 'Question',
-        name: 'Is FileShare really free?',
+        name: 'Is QRFlowX really free?',
         acceptedAnswer: {
           '@type': 'Answer',
-          text: 'Yes, FileShare is completely free to use. There are no hidden fees, no subscription plans, and no limits on the number of files you can share.',
+          text: 'Yes, QRFlowX is completely free to use. There are no hidden fees, no subscription plans, and no limits on the number of files you can share.',
         },
       },
       {
@@ -92,7 +89,7 @@ export default function LandingPage() {
         name: 'What file types are supported?',
         acceptedAnswer: {
           '@type': 'Answer',
-          text: 'FileShare supports PDF, DOCX (Word documents), PNG, JPG, JPEG, and GIF files. Each file can be up to 100MB in size.',
+          text: 'QRFlowX supports PDF, DOCX (Word documents), PNG, JPG, JPEG, and GIF files. Each file can be up to 100MB in size.',
         },
       },
       {
@@ -108,7 +105,7 @@ export default function LandingPage() {
         name: 'Do I need to create an account?',
         acceptedAnswer: {
           '@type': 'Answer',
-          text: 'No account required! Simply visit FileShare, upload your files, and get your QR code instantly. No registration, no email verification, no passwords to remember.',
+          text: 'No account required! Simply visit QRFlowX, upload your files, and get your QR code instantly. No registration, no email verification, no passwords to remember.',
         },
       },
     ],
@@ -184,15 +181,103 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* Why Choose FileShare */}
+      {/* About Section */}
+      <section className="py-20 bg-white border-b border-gray-100">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+            <div>
+              <div className="inline-flex items-center gap-2 px-4 py-2 bg-blue-50 text-blue-700 rounded-full text-sm font-semibold mb-6">
+                About QRFlowX
+              </div>
+              <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-6">
+                What is QRFlowX?
+              </h2>
+              <p className="text-lg text-gray-600 mb-6 leading-relaxed">
+                QRFlowX is a free, secure file sharing platform that makes it incredibly easy to share files with anyone, anywhere. Upload your file, get an instant QR code, and share it in seconds.
+              </p>
+              <p className="text-lg text-gray-600 mb-6 leading-relaxed">
+                No registration required. No email verification. No complex settings. Just upload, scan, and download. It&apos;s that simple.
+              </p>
+              <div className="space-y-4">
+                <div className="flex items-start gap-3">
+                  <div className="w-6 h-6 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                    <svg className="w-4 h-4 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                    </svg>
+                  </div>
+                  <div>
+                    <h3 className="font-semibold text-gray-900 mb-1">Privacy First</h3>
+                    <p className="text-gray-600">Files automatically delete after 60 minutes. No permanent storage, no tracking.</p>
+                  </div>
+                </div>
+                <div className="flex items-start gap-3">
+                  <div className="w-6 h-6 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                    <svg className="w-4 h-4 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                    </svg>
+                  </div>
+                  <div>
+                    <h3 className="font-semibold text-gray-900 mb-1">Universal Access</h3>
+                    <p className="text-gray-600">Works on any device with a camera or web browser. iOS, Android, Windows, Mac.</p>
+                  </div>
+                </div>
+                <div className="flex items-start gap-3">
+                  <div className="w-6 h-6 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                    <svg className="w-4 h-4 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                    </svg>
+                  </div>
+                  <div>
+                    <h3 className="font-semibold text-gray-900 mb-1">Always Free</h3>
+                    <p className="text-gray-600">No hidden costs, no premium tiers. Full features available to everyone, forever.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="relative">
+              <div className="bg-gradient-to-br from-blue-50 to-purple-50 rounded-2xl p-8 border border-blue-100">
+                <div className="grid grid-cols-2 gap-6">
+                  <div className="bg-white rounded-xl p-6 shadow-sm">
+                    <div className="text-3xl font-bold text-blue-600 mb-2">100MB</div>
+                    <div className="text-sm text-gray-600">Max file size</div>
+                  </div>
+                  <div className="bg-white rounded-xl p-6 shadow-sm">
+                    <div className="text-3xl font-bold text-green-600 mb-2">60min</div>
+                    <div className="text-sm text-gray-600">File lifetime</div>
+                  </div>
+                  <div className="bg-white rounded-xl p-6 shadow-sm">
+                    <div className="text-3xl font-bold text-purple-600 mb-2">0$</div>
+                    <div className="text-sm text-gray-600">Always free</div>
+                  </div>
+                  <div className="bg-white rounded-xl p-6 shadow-sm">
+                    <div className="text-3xl font-bold text-orange-600 mb-2">6</div>
+                    <div className="text-sm text-gray-600">File types</div>
+                  </div>
+                </div>
+                <div className="mt-6 bg-white rounded-xl p-6 shadow-sm">
+                  <div className="flex items-center gap-3 mb-3">
+                    <svg className="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                    </svg>
+                    <h3 className="font-semibold text-gray-900">Secure & Encrypted</h3>
+                  </div>
+                  <p className="text-sm text-gray-600">All uploads use HTTPS encryption. Your files are protected during transfer and storage.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Why Choose QRFlowX */}
       <section className="py-20 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="text-4xl sm:text-5xl font-bold text-gray-900 mb-4">
-              Why Customers Choose FileShare
+              Why Customers Choose QRFlowX
             </h2>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              Built for speed, security, and simplicity. FileShare solves real problems for real people.
+              Built for speed, security, and simplicity. QRFlowX solves real problems for real people.
             </p>
           </div>
 
@@ -207,7 +292,7 @@ export default function LandingPage() {
                 </div>
                 <div>
                   <h3 className="text-lg font-bold text-gray-900 mb-2">The Problem</h3>
-                  <p className="text-gray-600">Email attachments are slow, have size limits, and require knowing someone's email address. Cloud storage requires accounts and complex sharing settings.</p>
+                  <p className="text-gray-600">Email attachments are slow, have size limits, and require knowing someone&apos;s email address. Cloud storage requires accounts and complex sharing settings.</p>
                 </div>
               </div>
               <div className="flex items-start gap-4 pt-4 border-t-2 border-blue-200">
@@ -260,7 +345,7 @@ export default function LandingPage() {
               Powerful Features, Zero Complexity
             </h2>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              Everything you need for fast, secure file sharing. Nothing you don't.
+              Everything you need for fast, secure file sharing. Nothing you don&apos;t.
             </p>
           </div>
 
@@ -474,7 +559,7 @@ export default function LandingPage() {
               Perfect For Every Situation
             </h2>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              From personal use to professional workflows, FileShare adapts to your needs
+              From personal use to professional workflows, QRFlowX adapts to your needs
             </p>
           </div>
 
@@ -627,11 +712,141 @@ export default function LandingPage() {
               onClick={handleGetStarted}
               className="inline-flex items-center gap-2 px-8 py-4 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition-all duration-200 font-semibold text-lg shadow-lg hover:shadow-xl"
             >
-              Try It Now - It's Free
+              Try It Now - It&apos;s Free
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
               </svg>
             </button>
+          </div>
+        </div>
+      </section>
+
+      {/* All Services Section */}
+      <section className="py-20 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl sm:text-5xl font-bold text-gray-900 mb-4">
+              All Our Free Tools
+            </h2>
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+              A complete suite of QR code and file sharing tools, all free to use
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {/* File to QR */}
+            <a
+              href="/app"
+              className="group bg-gradient-to-br from-blue-50 to-white p-8 rounded-2xl border-2 border-blue-100 hover:border-blue-300 hover:shadow-lg transition-all duration-200"
+            >
+              <div className="w-14 h-14 bg-blue-600 rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                <svg className="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+                </svg>
+              </div>
+              <h3 className="text-xl font-bold text-gray-900 mb-3">File to QR Code</h3>
+              <p className="text-gray-600 mb-4">Upload files and generate QR codes for instant sharing. Supports PDF, DOCX, images up to 100MB.</p>
+              <div className="flex items-center text-blue-600 font-semibold group-hover:gap-2 transition-all">
+                Try it now
+                <svg className="w-5 h-5 ml-1 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                </svg>
+              </div>
+            </a>
+
+            {/* QR Scanner */}
+            <a
+              href="/scanner"
+              className="group bg-gradient-to-br from-green-50 to-white p-8 rounded-2xl border-2 border-green-100 hover:border-green-300 hover:shadow-lg transition-all duration-200"
+            >
+              <div className="w-14 h-14 bg-green-600 rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                <svg className="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z" />
+                </svg>
+              </div>
+              <h3 className="text-xl font-bold text-gray-900 mb-3">QR Code Scanner</h3>
+              <p className="text-gray-600 mb-4">Upload an image containing a QR code to decode and read its contents instantly.</p>
+              <div className="flex items-center text-green-600 font-semibold group-hover:gap-2 transition-all">
+                Scan QR code
+                <svg className="w-5 h-5 ml-1 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                </svg>
+              </div>
+            </a>
+
+            {/* Text to QR */}
+            <a
+              href="/text-to-qr"
+              className="group bg-gradient-to-br from-purple-50 to-white p-8 rounded-2xl border-2 border-purple-100 hover:border-purple-300 hover:shadow-lg transition-all duration-200"
+            >
+              <div className="w-14 h-14 bg-purple-600 rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                <svg className="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                </svg>
+              </div>
+              <h3 className="text-xl font-bold text-gray-900 mb-3">Text to QR Code</h3>
+              <p className="text-gray-600 mb-4">Convert any text, URL, phone number, or message into a scannable QR code.</p>
+              <div className="flex items-center text-purple-600 font-semibold group-hover:gap-2 transition-all">
+                Generate QR
+                <svg className="w-5 h-5 ml-1 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                </svg>
+              </div>
+            </a>
+
+            {/* URL Shortener */}
+            <a
+              href="/url-shortener"
+              className="group bg-gradient-to-br from-orange-50 to-white p-8 rounded-2xl border-2 border-orange-100 hover:border-orange-300 hover:shadow-lg transition-all duration-200"
+            >
+              <div className="w-14 h-14 bg-orange-600 rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                <svg className="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
+                </svg>
+              </div>
+              <h3 className="text-xl font-bold text-gray-900 mb-3">URL Shortener</h3>
+              <p className="text-gray-600 mb-4">Create short, memorable links that are easy to share on social media and messaging apps.</p>
+              <div className="flex items-center text-orange-600 font-semibold group-hover:gap-2 transition-all">
+                Shorten URL
+                <svg className="w-5 h-5 ml-1 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                </svg>
+              </div>
+            </a>
+
+            {/* vCard Generator */}
+            <a
+              href="/vcard-generator"
+              className="group bg-gradient-to-br from-indigo-50 to-white p-8 rounded-2xl border-2 border-indigo-100 hover:border-indigo-300 hover:shadow-lg transition-all duration-200"
+            >
+              <div className="w-14 h-14 bg-indigo-600 rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                <svg className="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                </svg>
+              </div>
+              <h3 className="text-xl font-bold text-gray-900 mb-3">vCard Generator</h3>
+              <p className="text-gray-600 mb-4">Create digital business cards with QR codes. Share contact info that saves directly to phones.</p>
+              <div className="flex items-center text-indigo-600 font-semibold group-hover:gap-2 transition-all">
+                Create vCard
+                <svg className="w-5 h-5 ml-1 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                </svg>
+              </div>
+            </a>
+
+            {/* Coming Soon Placeholder */}
+            <div className="bg-gradient-to-br from-gray-50 to-white p-8 rounded-2xl border-2 border-gray-200">
+              <div className="w-14 h-14 bg-gray-300 rounded-xl flex items-center justify-center mb-6">
+                <svg className="w-7 h-7 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                </svg>
+              </div>
+              <h3 className="text-xl font-bold text-gray-900 mb-3">More Coming Soon</h3>
+              <p className="text-gray-600 mb-4">We&apos;re constantly adding new tools and features. Stay tuned for updates!</p>
+              <div className="flex items-center text-gray-500 font-semibold">
+                Coming soon
+              </div>
+            </div>
           </div>
         </div>
       </section>
@@ -666,17 +881,17 @@ export default function LandingPage() {
               Frequently Asked Questions
             </h2>
             <p className="text-lg text-gray-600">
-              Everything you need to know about FileShare
+              Everything you need to know about QRFlowX
             </p>
           </div>
 
           <div className="space-y-8">
             <article className="border-b border-gray-200 pb-8">
               <h3 className="text-xl font-semibold text-gray-900 mb-3">
-                Is FileShare really free?
+                Is QRFlowX really free?
               </h3>
               <p className="text-gray-600 leading-relaxed">
-                Yes, FileShare is completely free to use. There are no hidden fees, no subscription plans, and no limits on the number of files you can share. We believe file sharing should be accessible to everyone.
+                Yes, QRFlowX is completely free to use. There are no hidden fees, no subscription plans, and no limits on the number of files you can share. We believe file sharing should be accessible to everyone.
               </p>
             </article>
 
@@ -685,7 +900,7 @@ export default function LandingPage() {
                 How secure is my file?
               </h3>
               <p className="text-gray-600 leading-relaxed">
-                Your files are encrypted during upload and automatically deleted after 60 minutes. We don't store files permanently, track your activity, or share your data with third parties. Your privacy is our priority.
+                Your files are encrypted during upload and automatically deleted after 60 minutes. We don&apos;t store files permanently, track your activity, or share your data with third parties. Your privacy is our priority.
               </p>
             </article>
 
@@ -694,7 +909,7 @@ export default function LandingPage() {
                 What file types are supported?
               </h3>
               <p className="text-gray-600 leading-relaxed">
-                FileShare supports PDF, DOCX (Word documents), PNG, JPG, JPEG, and GIF files. Each file can be up to 100MB in size. You can upload multiple files at once.
+                QRFlowX supports PDF, DOCX (Word documents), PNG, JPG, JPEG, and GIF files. Each file can be up to 100MB in size. You can upload multiple files at once.
               </p>
             </article>
 
@@ -712,13 +927,13 @@ export default function LandingPage() {
                 Do I need to create an account?
               </h3>
               <p className="text-gray-600 leading-relaxed">
-                No account required! Simply visit FileShare, upload your files, and get your QR code instantly. No registration, no email verification, no passwords to remember.
+                No account required! Simply visit QRFlowX, upload your files, and get your QR code instantly. No registration, no email verification, no passwords to remember.
               </p>
             </article>
 
             <article className="pb-8">
               <h3 className="text-xl font-semibold text-gray-900 mb-3">
-                Can I share files with people who don't have smartphones?
+                Can I share files with people who don&apos;t have smartphones?
               </h3>
               <p className="text-gray-600 leading-relaxed">
                 Yes! While QR codes are convenient for mobile devices, every upload also generates a regular web link that can be shared via email, messaging apps, or copied and pasted anywhere. Recipients can access files from any device with a web browser.

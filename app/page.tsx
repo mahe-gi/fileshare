@@ -2,28 +2,28 @@ import LandingPage from './landing';
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'FileShare - Free Instant File Sharing with QR Codes | No Sign-Up Required',
-  description: 'Share files instantly with QR codes. Upload PDF, DOCX, PNG, JPG, GIF files up to 100MB. Free, secure, and fast. No registration needed. Files auto-delete after 60 minutes.',
+  title: 'QRFlowX - Free QR Code & File Sharing Tools | Flow Your Files',
+  description: 'QRFlowX - Complete suite of free tools: Upload files with QR codes, scan QR codes, generate QR codes from text, shorten URLs, and create digital business cards. Flow your files instantly!',
   keywords: [
+    'QRFlowX',
+    'QR code generator',
     'file sharing',
-    'QR code file sharing',
+    'QR code scanner',
+    'text to QR code',
+    'URL shortener',
+    'vCard generator',
     'instant file transfer',
-    'free file upload',
-    'secure file sharing',
-    'temporary file sharing',
-    'share files online',
-    'no signup file sharing',
-    'quick file transfer',
-    'send files free',
+    'free QR tools',
+    'flow files',
   ],
   openGraph: {
-    title: 'FileShare - Free Instant File Sharing with QR Codes',
-    description: 'Share files instantly with QR codes. Free, secure, and fast. No sign-up required.',
+    title: 'QRFlowX - Flow Your Files Through QR',
+    description: 'Complete suite of free QR code and file sharing tools. Flow your files instantly!',
     type: 'website',
-    url: 'https://fileshare.vercel.app',
+    url: 'https://qrflowx.vercel.app',
   },
   alternates: {
-    canonical: 'https://fileshare.vercel.app',
+    canonical: 'https://qrflowx.vercel.app',
   },
 };
 
